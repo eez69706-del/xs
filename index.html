@@ -91,6 +91,7 @@
     .btn-cream { background-color: #fff; color: var(--border-black); text-shadow: none; }
     .btn-purple { background-color: #8b5cf6; }
     .btn-gold { background-color: #f59e0b; }
+    .btn-pink { background-color: #ec4899; }
 
     .neo-card {
       background-color: #fff;
@@ -333,7 +334,6 @@
       }
     }
 
-    /* ====== شاشة الفائز ====== */
     .winner-screen {
       max-width: 500px;
       text-align: center;
@@ -485,7 +485,7 @@
     </div>
   </div>
 
-  <!-- ====== شاشة كتابة أسماء الفرق ====== -->
+  <!-- ====== شاشة المقدم - كتابة أسماء الفرق ====== -->
   <div id="screen-setup" class="screen">
     <div class="neo-card setup-card" style="max-width: 500px;">
       <h2 class="modal-title">🎤 العرض التقديمي</h2>
@@ -512,23 +512,25 @@
     </div>
   </div>
 
-  <!-- ====== شاشة الباركود ====== -->
+  <!-- ====== شاشة الباركود (للمشاهدين) ====== -->
   <div id="screen-qr" class="screen">
     <div class="neo-card" style="max-width: 500px;">
-      <h2 class="modal-title">📱 شارك الرابط</h2>
+      <h2 class="modal-title">📱 شارك مع المشاهدين</h2>
       
       <div class="qr-section">
-        <p style="font-weight: 700; margin-bottom: 15px;">امسح الباركود أو شارك الرابط:</p>
+        <p style="font-weight: 700; margin-bottom: 15px;">المشاهدين يمسحون هذا الباركود:</p>
         <img id="qr-code-img" src="" alt="QR Code" class="qr-code-img">
         <div class="share-link" id="qr-link-display">جاري التحميل...</div>
         <button onclick="copyLink()" class="neo-btn btn-purple" style="width: 100%; font-size: 0.9rem; padding: 10px;">
-          📋 نسخ الرابط
+          📋 نسخ رابط المشاهدين
         </button>
       </div>
 
+      <p style="text-align: center; font-weight: 700; margin: 10px 0;">— أو —</p>
+
       <div class="qr-buttons">
         <button onclick="startGame()" class="neo-btn btn-start" style="font-size: 1.2rem;">
-          🚀 ابدأ
+          🚀 ابدأ اللعبة (المقدم)
         </button>
         <button onclick="openSettings()" class="neo-btn btn-cream" style="font-size: 1.2rem;">
           ⚙️ إعدادات
@@ -890,6 +892,7 @@
       gameState.team1Name = team1;
       gameState.team2Name = team2;
       
+      // رابط المشاهدين
       const url = window.location.href.split('?')[0] + '?viewer=true';
       document.getElementById('qr-link-display').textContent = url;
       
@@ -928,7 +931,7 @@
     function copyLink() {
       const text = document.getElementById('qr-link-display').textContent;
       navigator.clipboard.writeText(text).then(() => {
-        alert('✅ تم نسخ الرابط!');
+        alert('✅ تم نسخ رابط المشاهدين!');
       }).catch(() => {
         const input = document.createElement('input');
         input.value = text;
@@ -936,7 +939,7 @@
         input.select();
         document.execCommand('copy');
         document.body.removeChild(input);
-        alert('✅ تم نسخ الرابط!');
+        alert('✅ تم نسخ رابط المشاهدين!');
       });
     }
 
@@ -1027,7 +1030,7 @@
       updateViewer();
     }
 
-    // ====== اختيار الفريق الفائز - تظهر شاشة الفائز ======
+    // ====== اختيار الفريق الفائز ======
     function markTeamCorrect(team) {
       if (!gameState.answerRevealed) {
         alert('⚠️ كشف الإجابة أولاً!');
@@ -1051,7 +1054,6 @@
         gameState.team2Score += 1;
       }
       
-      // ====== عرض شاشة الفائز ======
       document.getElementById('winner-answer').textContent = riddle.answer;
       const winnerDisplay = document.getElementById('winner-team-display');
       winnerDisplay.textContent = '🏆 ' + winnerName;
@@ -1064,11 +1066,9 @@
       updateScores();
       saveGameState();
       
-      // إظهار شاشة الفائز
       showScreen('screen-winner');
     }
 
-    // ====== إغلاق شاشة الفائز ======
     function closeWinner() {
       showScreen('screen-presenter');
       nextQuestion();
@@ -1312,19 +1312,27 @@
     // ========== التشغيل ==========
     window.onload = function() {
       const params = new URLSearchParams(window.location.search);
+      const mode = params.get('mode');
       const viewer = params.get('viewer');
       
       loadSettings();
       loadGameState();
       
-      if (viewer === 'true') {
+      // إذا كان mode=presenter → المقدم يروح لشاشة الإعداد
+      if (mode === 'presenter') {
+        showScreen('screen-setup');
+      }
+      // إذا كان viewer=true → المشاهدين يروحون لشاشة المشاهدين
+      else if (viewer === 'true') {
         document.getElementById('v-team1').textContent = gameState.team1Name;
         document.getElementById('v-team2').textContent = gameState.team2Name;
         document.getElementById('v-total-rounds').textContent = RIDDLES.length;
         updateViewer();
         setInterval(updateViewer, 1000);
         showScreen('screen-viewer');
-      } else {
+      }
+      // غير ذلك → الصفحة الرئيسية
+      else {
         showScreen('screen-home');
       }
     };
