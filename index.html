@@ -84,6 +84,11 @@
       box-shadow: 0px 0px 0px var(--border-black);
     }
 
+    .neo-btn:disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
     .btn-green { background-color: var(--bg-green); }
     .btn-orange { background-color: var(--bg-orange); }
     .btn-blue { background-color: var(--bg-blue); }
@@ -208,6 +213,35 @@
       font-weight: 700;
       text-align: center;
     }
+
+    .session-badge {
+      display: inline-block;
+      background: #181916;
+      color: #fff;
+      font-weight: 800;
+      letter-spacing: 2px;
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+
+    .conn-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #666;
+    }
+    .conn-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #5dcf72;
+      display: inline-block;
+    }
+    .conn-dot.offline { background: #ef4444; }
 
     .qr-buttons {
       display: grid;
@@ -584,6 +618,10 @@
   <div id="screen-qr" class="screen">
     <div class="neo-card" style="max-width: 500px;">
       <h2 class="modal-title">📱 شارك مع المشاهدين</h2>
+
+      <div style="text-align:center;">
+        <span class="session-badge" id="qr-session-code">------</span>
+      </div>
       
       <div class="qr-section">
         <p style="font-weight: 700; margin-bottom: 15px;">المشاهدين يمسحون هذا الباركود:</p>
@@ -625,9 +663,12 @@
           <span class="score-team1">🟦 <span id="p-team1">الفريق1</span>: <span id="p-team1-score">0</span></span>
           <span class="score-team2">🟪 <span id="p-team2">الفريق2</span>: <span id="p-team2-score">0</span></span>
         </div>
-        <button onclick="endGame()" class="neo-btn btn-red" style="width: auto; font-size: 0.9rem;">
-          ⏹ إنهاء
-        </button>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="conn-status"><span class="conn-dot" id="p-conn-dot"></span><span id="p-conn-text">متصل بالمشاهدين</span></span>
+          <button onclick="endGame()" class="neo-btn btn-red" style="width: auto; font-size: 0.9rem;">
+            ⏹ إنهاء
+          </button>
+        </div>
       </div>
 
       <div class="presenter-screen">
@@ -684,9 +725,12 @@
           <span class="score-team1">🟦 <span id="v-team1">الفريق1</span>: <span id="v-team1-score">0</span></span>
           <span class="score-team2">🟪 <span id="v-team2">الفريق2</span>: <span id="v-team2-score">0</span></span>
         </div>
-        <button onclick="goHome()" class="neo-btn btn-cream" style="width: auto; font-size: 0.9rem;">
-          🏠 خروج
-        </button>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="conn-status"><span class="conn-dot" id="v-conn-dot"></span><span id="v-conn-text">جاري الاتصال...</span></span>
+          <button onclick="goHome()" class="neo-btn btn-cream" style="width: auto; font-size: 0.9rem;">
+            🏠 خروج
+          </button>
+        </div>
       </div>
 
       <div class="quiz-image" id="v-quiz-image">🚀</div>
@@ -888,6 +932,8 @@
 
     // ========== الحالة ==========
     let gameState = {
+      sessionId: null,
+
       team1Name: 'النمور 🐯',
       team2Name: 'الأسود 🦁',
       team1Score: 0,
@@ -907,13 +953,16 @@
       multiAnswer: [],
       multiRound: 0,
       multiP1Name: '',
-      multiP2Name: ''
+      multiP2Name: '',
+
+      _lastViewerState: null
     };
 
     // ========== التنقل ==========
     function goHome() {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById('screen-home').classList.add('active');
+      stopViewerPolling();
     }
 
     function showScreen(id) {
@@ -921,8 +970,25 @@
       document.getElementById(id).classList.add('active');
     }
 
-    // ========== حفظ واسترجاع ==========
-    function saveGameState() {
+    // ========== باك اند: تخزين الجلسة (يعمل بين أي جوالين) ==========
+    // كل جلسة عرض تقديمي إلها رمز فريد، والحالة تنحفظ في تخزين سحابي مشترك
+    // بين المقدم وكل المشاهدين، فتشتغل اللعبة حتى لو كل واحد على جوال مختلف.
+
+    function generateSessionId() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let id = '';
+      for (let i = 0; i < 5; i++) {
+        id += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return id;
+    }
+
+    function sessionKey(id) {
+      return 'game_session:' + id;
+    }
+
+    async function saveSessionState() {
+      if (!gameState.sessionId) return;
       const data = {
         team1Name: gameState.team1Name,
         team2Name: gameState.team2Name,
@@ -931,31 +997,52 @@
         currentRiddleIndex: gameState.currentRiddleIndex,
         answerRevealed: gameState.answerRevealed,
         roundEnded: gameState.roundEnded,
-        winner: gameState.winner
+        winner: gameState.winner,
+        updatedAt: Date.now()
       };
-      localStorage.setItem('gameState', JSON.stringify(data));
+      try {
+        const result = await window.storage.set(sessionKey(gameState.sessionId), JSON.stringify(data), true);
+        setPresenterConn(!!result);
+      } catch (e) {
+        console.error('تعذر حفظ حالة الجلسة', e);
+        setPresenterConn(false);
+      }
     }
 
-    function loadGameState() {
-      const saved = localStorage.getItem('gameState');
-      if (saved) {
-        try {
-          const data = JSON.parse(saved);
-          gameState.team1Name = data.team1Name || gameState.team1Name;
-          gameState.team2Name = data.team2Name || gameState.team2Name;
-          gameState.team1Score = data.team1Score || 0;
-          gameState.team2Score = data.team2Score || 0;
-          gameState.currentRiddleIndex = data.currentRiddleIndex || 0;
-          gameState.answerRevealed = data.answerRevealed || false;
-          gameState.roundEnded = data.roundEnded || false;
-          gameState.winner = data.winner || null;
-        } catch(e) {}
+    async function loadSessionState(sessionId) {
+      try {
+        const result = await window.storage.get(sessionKey(sessionId), true);
+        return result ? JSON.parse(result.value) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function setPresenterConn(ok) {
+      const dot = document.getElementById('p-conn-dot');
+      const text = document.getElementById('p-conn-text');
+      if (!dot) return;
+      dot.classList.toggle('offline', !ok);
+      text.textContent = ok ? 'متصل بالمشاهدين' : 'تعذر الاتصال';
+    }
+
+    function setViewerConn(ok) {
+      const dot = document.getElementById('v-conn-dot');
+      const text = document.getElementById('v-conn-text');
+      if (!dot) return;
+      dot.classList.toggle('offline', !ok);
+      text.textContent = ok ? 'متصل بالمقدم' : 'جاري الاتصال...';
+    }
+
+    function stopViewerPolling() {
+      if (window._viewerInterval) {
+        clearInterval(window._viewerInterval);
+        window._viewerInterval = null;
       }
     }
 
     // ========== إشعار المشاهد فقط ==========
     function showNotification(text, sub = '') {
-      // فقط إذا كانت شاشة المشاهدين ظاهرة
       const viewerScreen = document.getElementById('screen-viewer');
       if (!viewerScreen.classList.contains('active')) return;
       
@@ -971,26 +1058,36 @@
 
     // ========== اختيار الدور عند فتح رابط الباركود ==========
     function chooseRolePresenter() {
-      // المقدم اختار "أنا المقدم" فوديه لصفحة إعداد المقدم بدون بارامتر viewer
       const baseUrl = window.location.href.split('?')[0];
       window.location.href = baseUrl + '?mode=presenter';
     }
 
     function chooseRoleViewer() {
-      loadGameState();
-      document.getElementById('v-team1').textContent = gameState.team1Name;
-      document.getElementById('v-team2').textContent = gameState.team2Name;
-      document.getElementById('v-total-rounds').textContent = RIDDLES.length;
-      updateViewer();
-      if (!window._viewerInterval) {
-        window._viewerInterval = setInterval(updateViewer, 1000);
+      const params = new URLSearchParams(window.location.search);
+      const sessionId = params.get('session');
+
+      if (!sessionId) {
+        alert('⚠️ رابط غير صالح، اطلب من المقدم رابط أو باركود جديد');
+        goHome();
+        return;
       }
+
+      gameState.sessionId = sessionId;
+      gameState._lastViewerState = null;
+
+      document.getElementById('v-total-rounds').textContent = RIDDLES.length;
+      setViewerConn(false);
       showScreen('screen-viewer');
+
+      updateViewer();
+      stopViewerPolling();
+      window._viewerInterval = setInterval(updateViewer, 1500);
     }
 
     // ========== عرض تقديمي ==========
     function startPresentationMode() {
       loadSettings();
+      gameState.sessionId = null; // كل لعبة جديدة تاخذ رمز جلسة جديد
       showScreen('screen-setup');
     }
 
@@ -999,8 +1096,14 @@
       const team2 = document.getElementById('setup-team2').value.trim() || 'الأسود 🦁';
       gameState.team1Name = team1;
       gameState.team2Name = team2;
-      
-      const url = window.location.href.split('?')[0] + '?viewer=true';
+
+      if (!gameState.sessionId) {
+        gameState.sessionId = generateSessionId();
+      }
+
+      document.getElementById('qr-session-code').textContent = gameState.sessionId;
+
+      const url = window.location.href.split('?')[0] + '?viewer=true&session=' + gameState.sessionId;
       document.getElementById('qr-link-display').textContent = url;
       
       const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
@@ -1024,6 +1127,7 @@
       localStorage.setItem('team2_name', team2);
       alert('✅ تم حفظ الإعدادات!');
       goToQR();
+      saveSessionState();
     }
 
     function loadSettings() {
@@ -1050,27 +1154,53 @@
       });
     }
 
-    // ========== تحديث المشاهدين ==========
-    function updateViewer() {
-      loadGameState();
-      
-      const riddle = RIDDLES[gameState.currentRiddleIndex % RIDDLES.length];
-      
+    // ========== تحديث المشاهدين (يقرأ من الباك اند كل 1.5 ثانية) ==========
+    async function updateViewer() {
+      if (!gameState.sessionId) return;
+
+      const data = await loadSessionState(gameState.sessionId);
+
+      if (!data) {
+        setViewerConn(false);
+        return;
+      }
+      setViewerConn(true);
+
+      const prev = gameState._lastViewerState;
+      const riddle = RIDDLES[data.currentRiddleIndex % RIDDLES.length];
+
       document.getElementById('v-quiz-image').textContent = riddle.emoji.join(' + ');
-      document.getElementById('v-answer-display').textContent = gameState.answerRevealed ? 
+      document.getElementById('v-answer-display').textContent = data.answerRevealed ? 
         riddle.answer + ' (' + riddle.hint + ')' : '❓';
       
-      document.getElementById('v-current-round').textContent = gameState.currentRiddleIndex + 1;
+      document.getElementById('v-current-round').textContent = data.currentRiddleIndex + 1;
       document.getElementById('v-total-rounds').textContent = RIDDLES.length;
       
-      document.getElementById('v-team1').textContent = gameState.team1Name;
-      document.getElementById('v-team2').textContent = gameState.team2Name;
-      document.getElementById('v-team1-score').textContent = gameState.team1Score;
-      document.getElementById('v-team2-score').textContent = gameState.team2Score;
+      document.getElementById('v-team1').textContent = data.team1Name;
+      document.getElementById('v-team2').textContent = data.team2Name;
+      document.getElementById('v-team1-score').textContent = data.team1Score;
+      document.getElementById('v-team2-score').textContent = data.team2Score;
+
+      if (prev) {
+        if (data.currentRiddleIndex !== prev.currentRiddleIndex) {
+          showNotification('📢 سؤال جديد!', riddle.emoji.join(' + '));
+        } else if (data.answerRevealed && !prev.answerRevealed) {
+          showNotification('💡 تم كشف الإجابة!', 'الإجابة: ' + riddle.answer);
+        } else if (data.winner && data.winner !== prev.winner) {
+          const winnerName = data.winner === 1 ? data.team1Name : data.team2Name;
+          showNotification('🏆 ' + winnerName + ' جاوب صح!', 'الإجابة: ' + riddle.answer);
+        }
+      }
+
+      gameState._lastViewerState = data;
     }
 
     // ========== بدء اللعبة ==========
-    function startGame() {
+    async function startGame() {
+      if (!gameState.sessionId) {
+        gameState.sessionId = generateSessionId();
+      }
+
       gameState.team1Score = 0;
       gameState.team2Score = 0;
       gameState.currentRiddleIndex = 0;
@@ -1087,14 +1217,11 @@
       
       document.getElementById('p-total-rounds').textContent = RIDDLES.length;
       
-      saveGameState();
       showScreen('screen-presenter');
-      loadQuestion();
-      
-      showNotification('🎮 بدأت اللعبة!', 'استعد للإجابة');
+      await loadQuestion();
     }
 
-    function loadQuestion() {
+    async function loadQuestion() {
       const riddle = RIDDLES[gameState.currentRiddleIndex % RIDDLES.length];
       
       document.getElementById('p-quiz-image').textContent = riddle.emoji.join(' + ');
@@ -1109,24 +1236,18 @@
       document.getElementById('p-team2-btn').disabled = true;
       document.getElementById('p-reveal-btn').disabled = false;
       
-      updateScores();
-      saveGameState();
-      updateViewer();
-      
-      showNotification('📢 سؤال جديد!', riddle.emoji.join(' + '));
+      updateScoreDisplays();
+      await saveSessionState();
     }
 
-    function updateScores() {
+    function updateScoreDisplays() {
       document.getElementById('p-team1-score').textContent = gameState.team1Score;
       document.getElementById('p-team2-score').textContent = gameState.team2Score;
       document.getElementById('p-team1-score2').textContent = gameState.team1Score;
       document.getElementById('p-team2-score2').textContent = gameState.team2Score;
-      
-      saveGameState();
-      updateViewer();
     }
 
-    function revealAnswer() {
+    async function revealAnswer() {
       const riddle = RIDDLES[gameState.currentRiddleIndex % RIDDLES.length];
       
       document.getElementById('p-answer-display').textContent = riddle.answer + ' (' + riddle.hint + ')';
@@ -1137,14 +1258,11 @@
       document.getElementById('p-team2-btn').disabled = false;
       document.getElementById('p-reveal-btn').disabled = true;
       
-      saveGameState();
-      updateViewer();
-      
-      showNotification('💡 تم كشف الإجابة!', 'الإجابة: ' + riddle.answer);
+      await saveSessionState();
     }
 
     // ====== اختيار الفريق الفائز ======
-    function markTeamCorrect(team) {
+    async function markTeamCorrect(team) {
       if (!gameState.answerRevealed) {
         alert('⚠️ كشف الإجابة أولاً!');
         return;
@@ -1176,10 +1294,8 @@
       document.getElementById('p-team1-btn').disabled = true;
       document.getElementById('p-team2-btn').disabled = true;
       
-      updateScores();
-      saveGameState();
-      
-      showNotification('🏆 ' + winnerName + ' جاوب صح!', 'الإجابة: ' + riddle.answer);
+      updateScoreDisplays();
+      await saveSessionState();
       
       showScreen('screen-winner');
     }
@@ -1189,7 +1305,7 @@
       nextQuestion();
     }
 
-    function nextQuestion() {
+    async function nextQuestion() {
       if (!gameState.roundEnded) {
         alert('⚠️ اختر الفريق الفائز أولاً!');
         return;
@@ -1203,7 +1319,7 @@
         endGame();
         return;
       }
-      loadQuestion();
+      await loadQuestion();
     }
 
     function endGame() {
@@ -1431,17 +1547,16 @@
       const viewer = params.get('viewer');
       
       loadSettings();
-      loadGameState();
       
-      // المقدم: صراحة عن طريق ?mode=presenter
-      if (mode === 'presenter') {
+      // المقدم: رابطه العادي (بدون بارامترات) أو ?mode=presenter → يدخل مباشرة لصفحة الإعداد
+      if (mode === 'presenter' || (!viewer && !mode)) {
         showScreen('screen-setup');
       }
-      // رابط الباركود (?viewer=true): نسأل أول شي مين هو قبل ما نوديه للمشاهدين
+      // رابط الباركود (?viewer=true&session=XXXXX): نسأل أول شي مين هو قبل ما نوديه للمشاهدين
       else if (viewer === 'true') {
         showScreen('screen-role-choice');
       }
-      // الرابط العادي بدون أي بارامتر → الصفحة الرئيسية
+      // أي حالة ثانية غير متوقعة → الصفحة الرئيسية
       else {
         showScreen('screen-home');
       }
