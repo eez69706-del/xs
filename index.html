@@ -480,6 +480,22 @@
       font-weight: 400;
       opacity: 0.8;
     }
+
+    /* ====== شاشة اختيار الدور ====== */
+    .role-choice-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    .role-choice-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px;
+      font-size: 1.2rem;
+    }
   </style>
 </head>
 <body>
@@ -516,6 +532,23 @@
             <span>عرض تقديمي</span>
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== شاشة اختيار الدور (تظهر عند فتح رابط الباركود) ====== -->
+  <div id="screen-role-choice" class="screen">
+    <div class="neo-card" style="max-width: 500px; text-align: center;">
+      <h2 class="modal-title">مين انت؟ 🤔</h2>
+      <p style="font-weight: 700; margin-bottom: 20px; color: #666;">هذا رابط لعبة "تحدي الصور"، وش دورك فيها؟</p>
+
+      <div class="role-choice-buttons">
+        <button onclick="chooseRolePresenter()" class="neo-btn btn-blue role-choice-btn">
+          🎤 أنا المقدم
+        </button>
+        <button onclick="chooseRoleViewer()" class="neo-btn btn-green role-choice-btn">
+          👁️ أنا مشاهد
+        </button>
       </div>
     </div>
   </div>
@@ -934,6 +967,25 @@
       el._timeout = setTimeout(() => {
         el.classList.remove('show');
       }, 3000);
+    }
+
+    // ========== اختيار الدور عند فتح رابط الباركود ==========
+    function chooseRolePresenter() {
+      // المقدم اختار "أنا المقدم" فوديه لصفحة إعداد المقدم بدون بارامتر viewer
+      const baseUrl = window.location.href.split('?')[0];
+      window.location.href = baseUrl + '?mode=presenter';
+    }
+
+    function chooseRoleViewer() {
+      loadGameState();
+      document.getElementById('v-team1').textContent = gameState.team1Name;
+      document.getElementById('v-team2').textContent = gameState.team2Name;
+      document.getElementById('v-total-rounds').textContent = RIDDLES.length;
+      updateViewer();
+      if (!window._viewerInterval) {
+        window._viewerInterval = setInterval(updateViewer, 1000);
+      }
+      showScreen('screen-viewer');
     }
 
     // ========== عرض تقديمي ==========
@@ -1381,20 +1433,15 @@
       loadSettings();
       loadGameState();
       
-      // المقدم: الرابط العادي أو ?mode=presenter
-      if (mode === 'presenter' || (!viewer && !mode)) {
+      // المقدم: صراحة عن طريق ?mode=presenter
+      if (mode === 'presenter') {
         showScreen('screen-setup');
       }
-      // المشاهدين: ?viewer=true
+      // رابط الباركود (?viewer=true): نسأل أول شي مين هو قبل ما نوديه للمشاهدين
       else if (viewer === 'true') {
-        document.getElementById('v-team1').textContent = gameState.team1Name;
-        document.getElementById('v-team2').textContent = gameState.team2Name;
-        document.getElementById('v-total-rounds').textContent = RIDDLES.length;
-        updateViewer();
-        setInterval(updateViewer, 1000);
-        showScreen('screen-viewer');
+        showScreen('screen-role-choice');
       }
-      // غير ذلك → الصفحة الرئيسية
+      // الرابط العادي بدون أي بارامتر → الصفحة الرئيسية
       else {
         showScreen('screen-home');
       }
