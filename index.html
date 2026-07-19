@@ -452,7 +452,7 @@
       display: flex !important;
     }
 
-    /* ====== إشعار المشاهد ====== */
+    /* ====== إشعار المشاهد فقط ====== */
     .viewer-notification {
       position: fixed;
       top: 20px;
@@ -484,7 +484,7 @@
 </head>
 <body>
 
-  <!-- ====== إشعار المشاهد ====== -->
+  <!-- ====== إشعار المشاهد فقط ====== -->
   <div id="viewer-notification" class="viewer-notification">
     <div id="notification-text">📢 سؤال جديد!</div>
     <div class="sub" id="notification-sub"></div>
@@ -547,7 +547,7 @@
     </div>
   </div>
 
-  <!-- ====== شاشة الباركود ====== -->
+  <!-- ====== شاشة الباركود (للمقدم) ====== -->
   <div id="screen-qr" class="screen">
     <div class="neo-card" style="max-width: 500px;">
       <h2 class="modal-title">📱 شارك مع المشاهدين</h2>
@@ -920,8 +920,12 @@
       }
     }
 
-    // ========== إشعار المشاهد ==========
+    // ========== إشعار المشاهد فقط ==========
     function showNotification(text, sub = '') {
+      // فقط إذا كانت شاشة المشاهدين ظاهرة
+      const viewerScreen = document.getElementById('screen-viewer');
+      if (!viewerScreen.classList.contains('active')) return;
+      
       const el = document.getElementById('viewer-notification');
       document.getElementById('notification-text').textContent = text;
       document.getElementById('notification-sub').textContent = sub;
@@ -995,8 +999,6 @@
     }
 
     // ========== تحديث المشاهدين ==========
-    let viewerVersion = 0;
-
     function updateViewer() {
       loadGameState();
       
@@ -1037,7 +1039,6 @@
       showScreen('screen-presenter');
       loadQuestion();
       
-      // إشعار للمشاهدين
       showNotification('🎮 بدأت اللعبة!', 'استعد للإجابة');
     }
 
@@ -1060,7 +1061,6 @@
       saveGameState();
       updateViewer();
       
-      // إشعار للمشاهدين
       showNotification('📢 سؤال جديد!', riddle.emoji.join(' + '));
     }
 
@@ -1088,7 +1088,6 @@
       saveGameState();
       updateViewer();
       
-      // إشعار للمشاهدين
       showNotification('💡 تم كشف الإجابة!', 'الإجابة: ' + riddle.answer);
     }
 
@@ -1128,7 +1127,6 @@
       updateScores();
       saveGameState();
       
-      // إشعار للمشاهدين
       showNotification('🏆 ' + winnerName + ' جاوب صح!', 'الإجابة: ' + riddle.answer);
       
       showScreen('screen-winner');
@@ -1383,16 +1381,21 @@
       loadSettings();
       loadGameState();
       
-      if (mode === 'presenter') {
+      // المقدم: الرابط العادي أو ?mode=presenter
+      if (mode === 'presenter' || (!viewer && !mode)) {
         showScreen('screen-setup');
-      } else if (viewer === 'true') {
+      }
+      // المشاهدين: ?viewer=true
+      else if (viewer === 'true') {
         document.getElementById('v-team1').textContent = gameState.team1Name;
         document.getElementById('v-team2').textContent = gameState.team2Name;
         document.getElementById('v-total-rounds').textContent = RIDDLES.length;
         updateViewer();
         setInterval(updateViewer, 1000);
         showScreen('screen-viewer');
-      } else {
+      }
+      // غير ذلك → الصفحة الرئيسية
+      else {
         showScreen('screen-home');
       }
     };
