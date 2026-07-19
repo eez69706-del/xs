@@ -91,7 +91,6 @@
     .btn-cream { background-color: #fff; color: var(--border-black); text-shadow: none; }
     .btn-purple { background-color: #8b5cf6; }
     .btn-gold { background-color: #f59e0b; }
-    .btn-pink { background-color: #ec4899; }
 
     .neo-card {
       background-color: #fff;
@@ -308,24 +307,6 @@
       gap: 10px;
     }
 
-    .winner-text {
-      font-size: 1.5rem;
-      font-weight: 900;
-      text-align: center;
-      margin-top: 10px;
-      padding: 10px;
-      background: var(--bg-yellow);
-      border-radius: 12px;
-      border: 2px solid var(--border-black);
-    }
-
-    .round-info {
-      font-size: 0.9rem;
-      color: #666;
-      text-align: center;
-      margin-top: 5px;
-    }
-
     .btn-start {
       background-color: #ff8c00;
       font-size: 1.3rem;
@@ -352,17 +333,123 @@
       }
     }
 
-    .viewer-game {
-      width: 100%;
-      max-width: 800px;
+    /* ====== شاشة الفائز ====== */
+    .winner-screen {
+      max-width: 500px;
+      text-align: center;
     }
-    .viewer-game .quiz-image {
-      height: 350px;
-      font-size: 7rem;
+    .winner-screen .big-icon {
+      font-size: 4rem;
+      margin-bottom: 10px;
+    }
+    .winner-screen .winner-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--bg-green);
+    }
+    .winner-screen .winner-answer {
+      font-size: 2rem;
+      font-weight: 800;
+      background: var(--bg-cream);
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 3px solid var(--border-black);
+      margin: 10px 0;
+    }
+    .winner-screen .winner-team {
+      font-size: 1.8rem;
+      font-weight: 900;
+      padding: 10px;
+      border-radius: 12px;
+      border: 3px solid var(--border-black);
+      margin: 10px 0;
+    }
+    .winner-screen .winner-team.team1 {
+      background: #3b82f6;
+      color: #fff;
+    }
+    .winner-screen .winner-team.team2 {
+      background: #ec4899;
+      color: #fff;
+    }
+    .winner-screen .winner-sub {
+      font-size: 1.2rem;
+      color: #666;
+      margin-top: 5px;
     }
 
-    .hidden {
-      display: none !important;
+    .round-info {
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
+      margin-top: 5px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .riddle-image-box {
+      width: 100%;
+      height: 200px;
+      border: 3px solid var(--border-black);
+      border-radius: 18px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      box-shadow: 4px 4px 0px var(--border-black);
+      margin-bottom: 20px;
+    }
+
+    .blank-box {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--border-black);
+      border-radius: 10px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px var(--border-black);
+    }
+    .blank-box.filled {
+      background-color: var(--bg-yellow);
+      color: #fff;
+      text-shadow: 1px 1px 0px var(--border-black);
+    }
+
+    .key-btn {
+      height: 48px;
+      border: 3px solid var(--border-black);
+      border-radius: 12px;
+      background-color: #fff;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--border-black);
+      cursor: pointer;
+      box-shadow: 0px 4px 0px var(--border-black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.05s, box-shadow 0.05s;
+    }
+    .key-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0px 0px 0px var(--border-black);
+    }
+
+    .success-overlay.active {
+      display: flex !important;
     }
   </style>
 </head>
@@ -398,7 +485,7 @@
     </div>
   </div>
 
-  <!-- ====== شاشة 1: كتابة أسماء الفرق ====== -->
+  <!-- ====== شاشة كتابة أسماء الفرق ====== -->
   <div id="screen-setup" class="screen">
     <div class="neo-card setup-card" style="max-width: 500px;">
       <h2 class="modal-title">🎤 العرض التقديمي</h2>
@@ -425,7 +512,7 @@
     </div>
   </div>
 
-  <!-- ====== شاشة 2: الباركود ====== -->
+  <!-- ====== شاشة الباركود ====== -->
   <div id="screen-qr" class="screen">
     <div class="neo-card" style="max-width: 500px;">
       <h2 class="modal-title">📱 شارك الرابط</h2>
@@ -454,7 +541,7 @@
     </div>
   </div>
 
-  <!-- ====== شاشة 3: المقدم ====== -->
+  <!-- ====== شاشة المقدم ====== -->
   <div id="screen-presenter" class="screen">
     <div style="width: 100%; max-width: 1200px;">
       <div class="neo-card" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
@@ -497,10 +584,6 @@
             </div>
           </div>
 
-          <div id="p-winner-display" style="display: none;">
-            <div class="winner-text" id="p-winner-text">🏆 الفريق الفائز!</div>
-          </div>
-          
           <div class="round-info">عدد الصور: <span id="p-current-round">1</span> / <span id="p-total-rounds">10</span></div>
         </div>
 
@@ -512,21 +595,12 @@
               <p style="color: #ec4899;">🟪 <span id="p-team2-display2">الفريق2</span>: <span id="p-team2-score2">0</span></p>
             </div>
           </div>
-
-          <div class="neo-card">
-            <p style="font-weight: 700; margin-bottom: 5px;">📌 التعليمات:</p>
-            <p style="font-size: 0.9rem; color: #666; line-height: 2;">
-              1. اضغط <strong>"كشف الإجابة"</strong><br>
-              2. اختر الفريق الفائز<br>
-              3. اضغط <strong>"السؤال التالي"</strong>
-            </p>
-          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ====== شاشة 4: المشاهدين ====== -->
+  <!-- ====== شاشة المشاهدين ====== -->
   <div id="screen-viewer" class="screen">
     <div style="width: 100%; max-width: 800px;">
       <div class="neo-card" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
@@ -547,11 +621,31 @@
         <div id="v-answer-display" class="answer-display">❓</div>
       </div>
 
-      <div id="v-winner-display" style="display: none;">
-        <div class="winner-text" id="v-winner-text">🏆 الفريق الفائز!</div>
+      <div class="round-info">عدد الصور: <span id="v-current-round">1</span> / <span id="v-total-rounds">10</span></div>
+    </div>
+  </div>
+
+  <!-- ====== شاشة الفائز ====== -->
+  <div id="screen-winner" class="screen">
+    <div class="neo-card winner-screen" style="max-width: 500px;">
+      <div class="big-icon">🎉</div>
+      <div class="winner-title">صع عليك!</div>
+      
+      <div style="margin: 15px 0;">
+        <p style="font-weight: 700; font-size: 1.1rem; color: #666;">الإجابة:</p>
+        <div class="winner-answer" id="winner-answer">هدهد</div>
       </div>
 
-      <div class="round-info">عدد الصور: <span id="v-current-round">1</span> / <span id="v-total-rounds">10</span></div>
+      <div style="margin: 15px 0;">
+        <p style="font-weight: 700; font-size: 1.1rem; color: #666;">الفريق الفائز:</p>
+        <div class="winner-team team1" id="winner-team-display">🏆 النمور 🐯</div>
+      </div>
+
+      <div class="winner-sub" id="winner-sub">+1 نقطة</div>
+
+      <button onclick="closeWinner()" class="neo-btn btn-green control-full" style="margin-top: 20px;">
+        ➡️ السؤال التالي
+      </button>
     </div>
   </div>
 
@@ -597,7 +691,7 @@
 
       <div class="neo-card" style="position: relative;">
         <div class="success-overlay" id="solo-victory" style="position: absolute; inset: 0; background-color: rgba(93, 207, 114, 0.95); border-radius: 20px; z-index: 10; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 20px;">
-          <h2 class="sticker-text" style="font-size: 2rem; color: #fff;">إجابة صحيحة! 🎉</h2>
+          <h2 class="sticker-text" style="font-size: 2rem; color: #fff;">صع عليك! 🎉</h2>
           <p id="solo-victory-meaning" style="font-weight: 700; color: #fff; font-size: 1rem;"></p>
           <div style="display: flex; align-items: center; gap: 8px; font-size: 1.4rem; font-weight: 800; color: #fff;">
             <span>+١٥</span>
@@ -606,11 +700,11 @@
           <button onclick="nextSoloLevel()" class="neo-btn btn-cream" style="width: auto; margin-top: 10px;">المرحلة التالية</button>
         </div>
 
-        <div class="riddle-image-box" id="solo-quiz-image" style="width: 100%; height: 200px;">🚀</div>
+        <div class="riddle-image-box" id="solo-quiz-image">🚀</div>
 
-        <div class="answer-blanks" id="solo-blanks-container" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;"></div>
+        <div class="answer-blanks" id="solo-blanks-container"></div>
 
-        <div class="keyboard-grid" id="solo-keyboard-container" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; width: 100%; margin-bottom: 20px;"></div>
+        <div class="keyboard-grid" id="solo-keyboard-container"></div>
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; margin-top: 20px; border-top: 2px dashed rgba(24, 25, 22, 0.15); padding-top: 15px;">
           <button onclick="useHint('reveal')" class="neo-btn btn-cream" style="font-size: 0.85rem; padding: 8px 4px; border-radius: 12px; flex-direction: column; gap: 2px;">
@@ -675,7 +769,7 @@
 
       <div class="neo-card" style="position: relative;">
         <div class="success-overlay" id="multi-victory" style="position: absolute; inset: 0; background-color: rgba(93, 207, 114, 0.95); border-radius: 20px; z-index: 10; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 20px;">
-          <h2 class="sticker-text" style="font-size: 2rem; color: #fff;">إجابة صحيحة! 🎉</h2>
+          <h2 class="sticker-text" style="font-size: 2rem; color: #fff;">صع عليك! 🎉</h2>
           <p id="multi-victory-meaning" style="font-weight: 700; color: #fff; font-size: 1rem;"></p>
           <div style="display: flex; align-items: center; gap: 8px; font-size: 1.4rem; font-weight: 800; color: #fff;">
             <span>+١٠</span>
@@ -684,11 +778,11 @@
           <button onclick="nextMultiplayerRound()" class="neo-btn btn-cream" style="width: auto; margin-top: 10px;">الدور التالي</button>
         </div>
 
-        <div class="riddle-image-box" id="multi-quiz-image" style="width: 100%; height: 200px;">🚀</div>
+        <div class="riddle-image-box" id="multi-quiz-image">🚀</div>
 
-        <div class="answer-blanks" id="multi-blanks-container" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;"></div>
+        <div class="answer-blanks" id="multi-blanks-container"></div>
 
-        <div class="keyboard-grid" id="multi-keyboard-container" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; width: 100%; margin-bottom: 20px;"></div>
+        <div class="keyboard-grid" id="multi-keyboard-container"></div>
 
         <button onclick="submitMultiAnswer()" class="neo-btn btn-green control-full" style="font-size: 1rem;">
           ✓ أرسل إجابتك
@@ -696,71 +790,6 @@
       </div>
     </div>
   </div>
-
-  <style>
-    .success-overlay.active {
-      display: flex !important;
-    }
-    .blank-box {
-      width: 48px;
-      height: 48px;
-      border: 3px solid var(--border-black);
-      border-radius: 10px;
-      background-color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 2px 2px 0px var(--border-black);
-    }
-    .blank-box.filled {
-      background-color: var(--bg-yellow);
-      color: #fff;
-      text-shadow: 1px 1px 0px var(--border-black);
-    }
-    .key-btn {
-      height: 48px;
-      border: 3px solid var(--border-black);
-      border-radius: 12px;
-      background-color: #fff;
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--border-black);
-      cursor: pointer;
-      box-shadow: 0px 4px 0px var(--border-black);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.05s, box-shadow 0.05s;
-    }
-    .key-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0px 0px 0px var(--border-black);
-    }
-    .riddle-image-box {
-      width: 100%;
-      height: 200px;
-      border: 3px solid var(--border-black);
-      border-radius: 18px;
-      background-color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5rem;
-      box-shadow: 4px 4px 0px var(--border-black);
-      margin-bottom: 20px;
-    }
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-  </style>
 
   <script>
     // ========== الألغاز ==========
@@ -792,8 +821,6 @@
       answerRevealed: false,
       roundEnded: false,
       winner: null,
-      currentEmoji: '🚀',
-      currentAnswer: '❓',
       
       soloCoins: 100,
       soloLevel: 1,
@@ -819,7 +846,7 @@
       document.getElementById(id).classList.add('active');
     }
 
-    // ========== حفظ واسترجاع الحالة ==========
+    // ========== حفظ واسترجاع ==========
     function saveGameState() {
       const data = {
         team1Name: gameState.team1Name,
@@ -829,9 +856,7 @@
         currentRiddleIndex: gameState.currentRiddleIndex,
         answerRevealed: gameState.answerRevealed,
         roundEnded: gameState.roundEnded,
-        winner: gameState.winner,
-        currentEmoji: gameState.currentEmoji,
-        currentAnswer: gameState.currentAnswer
+        winner: gameState.winner
       };
       localStorage.setItem('gameState', JSON.stringify(data));
     }
@@ -849,8 +874,6 @@
           gameState.answerRevealed = data.answerRevealed || false;
           gameState.roundEnded = data.roundEnded || false;
           gameState.winner = data.winner || null;
-          gameState.currentEmoji = data.currentEmoji || '🚀';
-          gameState.currentAnswer = data.currentAnswer || '❓';
         } catch(e) {}
       }
     }
@@ -934,18 +957,9 @@
       document.getElementById('v-team2').textContent = gameState.team2Name;
       document.getElementById('v-team1-score').textContent = gameState.team1Score;
       document.getElementById('v-team2-score').textContent = gameState.team2Score;
-      
-      if (gameState.winner) {
-        const winnerName = gameState.winner === 1 ? gameState.team1Name : gameState.team2Name;
-        document.getElementById('v-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
-        document.getElementById('v-winner-text').style.color = gameState.winner === 1 ? '#3b82f6' : '#ec4899';
-        document.getElementById('v-winner-display').style.display = 'block';
-      } else {
-        document.getElementById('v-winner-display').style.display = 'none';
-      }
     }
 
-    // ========== بدء اللعبة (المقدم) ==========
+    // ========== بدء اللعبة ==========
     function startGame() {
       gameState.team1Score = 0;
       gameState.team2Score = 0;
@@ -978,16 +992,14 @@
       gameState.answerRevealed = false;
       gameState.roundEnded = false;
       gameState.winner = null;
-      gameState.currentEmoji = riddle.emoji.join(' + ');
-      gameState.currentAnswer = '❓';
       
       document.getElementById('p-team1-btn').disabled = true;
       document.getElementById('p-team2-btn').disabled = true;
       document.getElementById('p-reveal-btn').disabled = false;
-      document.getElementById('p-winner-display').style.display = 'none';
       
       updateScores();
       saveGameState();
+      updateViewer();
     }
 
     function updateScores() {
@@ -997,6 +1009,7 @@
       document.getElementById('p-team2-score2').textContent = gameState.team2Score;
       
       saveGameState();
+      updateViewer();
     }
 
     function revealAnswer() {
@@ -1005,15 +1018,16 @@
       document.getElementById('p-answer-display').textContent = riddle.answer + ' (' + riddle.hint + ')';
       
       gameState.answerRevealed = true;
-      gameState.currentAnswer = riddle.answer + ' (' + riddle.hint + ')';
       
       document.getElementById('p-team1-btn').disabled = false;
       document.getElementById('p-team2-btn').disabled = false;
       document.getElementById('p-reveal-btn').disabled = true;
       
       saveGameState();
+      updateViewer();
     }
 
+    // ====== اختيار الفريق الفائز - تظهر شاشة الفائز ======
     function markTeamCorrect(team) {
       if (!gameState.answerRevealed) {
         alert('⚠️ كشف الإجابة أولاً!');
@@ -1028,24 +1042,36 @@
       gameState.roundEnded = true;
       gameState.winner = team;
       
+      const riddle = RIDDLES[gameState.currentRiddleIndex % RIDDLES.length];
       const winnerName = team === 1 ? gameState.team1Name : gameState.team2Name;
       
       if (team === 1) {
         gameState.team1Score += 1;
-        document.getElementById('p-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
-        document.getElementById('p-winner-text').style.color = '#3b82f6';
       } else {
         gameState.team2Score += 1;
-        document.getElementById('p-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
-        document.getElementById('p-winner-text').style.color = '#ec4899';
       }
       
-      document.getElementById('p-winner-display').style.display = 'block';
+      // ====== عرض شاشة الفائز ======
+      document.getElementById('winner-answer').textContent = riddle.answer;
+      const winnerDisplay = document.getElementById('winner-team-display');
+      winnerDisplay.textContent = '🏆 ' + winnerName;
+      winnerDisplay.className = 'winner-team ' + (team === 1 ? 'team1' : 'team2');
+      document.getElementById('winner-sub').textContent = '+1 نقطة';
+      
       document.getElementById('p-team1-btn').disabled = true;
       document.getElementById('p-team2-btn').disabled = true;
       
       updateScores();
       saveGameState();
+      
+      // إظهار شاشة الفائز
+      showScreen('screen-winner');
+    }
+
+    // ====== إغلاق شاشة الفائز ======
+    function closeWinner() {
+      showScreen('screen-presenter');
+      nextQuestion();
     }
 
     function nextQuestion() {
@@ -1283,7 +1309,7 @@
       goHome();
     }
 
-    // ========== التشغيل عند تحميل الصفحة ==========
+    // ========== التشغيل ==========
     window.onload = function() {
       const params = new URLSearchParams(window.location.search);
       const viewer = params.get('viewer');
@@ -1292,17 +1318,11 @@
       loadGameState();
       
       if (viewer === 'true') {
-        // شاشة المشاهدين
         document.getElementById('v-team1').textContent = gameState.team1Name;
         document.getElementById('v-team2').textContent = gameState.team2Name;
         document.getElementById('v-total-rounds').textContent = RIDDLES.length;
-        
-        // تحديث أول مرة
         updateViewer();
-        
-        // تحديث كل ثانية
         setInterval(updateViewer, 1000);
-        
         showScreen('screen-viewer');
       } else {
         showScreen('screen-home');
