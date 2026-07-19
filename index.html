@@ -451,9 +451,44 @@
     .success-overlay.active {
       display: flex !important;
     }
+
+    /* ====== إشعار المشاهد ====== */
+    .viewer-notification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-green);
+      color: #fff;
+      padding: 15px 30px;
+      border-radius: 16px;
+      border: 3px solid var(--border-black);
+      box-shadow: var(--card-shadow);
+      font-weight: 800;
+      font-size: 1.2rem;
+      z-index: 999;
+      display: none;
+      text-align: center;
+      max-width: 90%;
+    }
+    .viewer-notification.show {
+      display: block;
+      animation: popIn 0.3s ease;
+    }
+    .viewer-notification .sub {
+      font-size: 0.9rem;
+      font-weight: 400;
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
+
+  <!-- ====== إشعار المشاهد ====== -->
+  <div id="viewer-notification" class="viewer-notification">
+    <div id="notification-text">📢 سؤال جديد!</div>
+    <div class="sub" id="notification-sub"></div>
+  </div>
 
   <!-- HOME SCREEN -->
   <div id="screen-home" class="screen active">
@@ -512,7 +547,7 @@
     </div>
   </div>
 
-  <!-- ====== شاشة الباركود (للمشاهدين) ====== -->
+  <!-- ====== شاشة الباركود ====== -->
   <div id="screen-qr" class="screen">
     <div class="neo-card" style="max-width: 500px;">
       <h2 class="modal-title">📱 شارك مع المشاهدين</h2>
@@ -530,7 +565,7 @@
 
       <div class="qr-buttons">
         <button onclick="startGame()" class="neo-btn btn-start" style="font-size: 1.2rem;">
-          🚀 ابدأ اللعبة (المقدم)
+          🚀 ابدأ اللعبة
         </button>
         <button onclick="openSettings()" class="neo-btn btn-cream" style="font-size: 1.2rem;">
           ⚙️ إعدادات
@@ -547,7 +582,12 @@
   <div id="screen-presenter" class="screen">
     <div style="width: 100%; max-width: 1200px;">
       <div class="neo-card" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
-        <h2 class="sticker-text" style="font-size: 1.5rem; margin: 0;">🎤 المقدم</h2>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button onclick="goToQR()" class="neo-btn btn-cream" style="width: auto; font-size: 0.8rem; padding: 8px 12px;">
+            ↩️ رجوع
+          </button>
+          <h2 class="sticker-text" style="font-size: 1.5rem; margin: 0;">🎤 المقدم</h2>
+        </div>
         <div class="score-display">
           <span class="score-team1">🟦 <span id="p-team1">الفريق1</span>: <span id="p-team1-score">0</span></span>
           <span class="score-team2">🟪 <span id="p-team2">الفريق2</span>: <span id="p-team2-score">0</span></span>
@@ -880,6 +920,18 @@
       }
     }
 
+    // ========== إشعار المشاهد ==========
+    function showNotification(text, sub = '') {
+      const el = document.getElementById('viewer-notification');
+      document.getElementById('notification-text').textContent = text;
+      document.getElementById('notification-sub').textContent = sub;
+      el.classList.add('show');
+      clearTimeout(el._timeout);
+      el._timeout = setTimeout(() => {
+        el.classList.remove('show');
+      }, 3000);
+    }
+
     // ========== عرض تقديمي ==========
     function startPresentationMode() {
       loadSettings();
@@ -892,7 +944,6 @@
       gameState.team1Name = team1;
       gameState.team2Name = team2;
       
-      // رابط المشاهدين
       const url = window.location.href.split('?')[0] + '?viewer=true';
       document.getElementById('qr-link-display').textContent = url;
       
@@ -944,6 +995,8 @@
     }
 
     // ========== تحديث المشاهدين ==========
+    let viewerVersion = 0;
+
     function updateViewer() {
       loadGameState();
       
@@ -983,6 +1036,9 @@
       saveGameState();
       showScreen('screen-presenter');
       loadQuestion();
+      
+      // إشعار للمشاهدين
+      showNotification('🎮 بدأت اللعبة!', 'استعد للإجابة');
     }
 
     function loadQuestion() {
@@ -1003,6 +1059,9 @@
       updateScores();
       saveGameState();
       updateViewer();
+      
+      // إشعار للمشاهدين
+      showNotification('📢 سؤال جديد!', riddle.emoji.join(' + '));
     }
 
     function updateScores() {
@@ -1028,6 +1087,9 @@
       
       saveGameState();
       updateViewer();
+      
+      // إشعار للمشاهدين
+      showNotification('💡 تم كشف الإجابة!', 'الإجابة: ' + riddle.answer);
     }
 
     // ====== اختيار الفريق الفائز ======
@@ -1065,6 +1127,9 @@
       
       updateScores();
       saveGameState();
+      
+      // إشعار للمشاهدين
+      showNotification('🏆 ' + winnerName + ' جاوب صح!', 'الإجابة: ' + riddle.answer);
       
       showScreen('screen-winner');
     }
@@ -1318,21 +1383,16 @@
       loadSettings();
       loadGameState();
       
-      // إذا كان mode=presenter → المقدم يروح لشاشة الإعداد
       if (mode === 'presenter') {
         showScreen('screen-setup');
-      }
-      // إذا كان viewer=true → المشاهدين يروحون لشاشة المشاهدين
-      else if (viewer === 'true') {
+      } else if (viewer === 'true') {
         document.getElementById('v-team1').textContent = gameState.team1Name;
         document.getElementById('v-team2').textContent = gameState.team2Name;
         document.getElementById('v-total-rounds').textContent = RIDDLES.length;
         updateViewer();
         setInterval(updateViewer, 1000);
         showScreen('screen-viewer');
-      }
-      // غير ذلك → الصفحة الرئيسية
-      else {
+      } else {
         showScreen('screen-home');
       }
     };
