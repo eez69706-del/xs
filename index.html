@@ -91,6 +91,7 @@
     .btn-cream { background-color: #fff; color: var(--border-black); text-shadow: none; }
     .btn-purple { background-color: #8b5cf6; }
     .btn-gold { background-color: #f59e0b; }
+    .btn-pink { background-color: #ec4899; }
 
     .neo-card {
       background-color: #fff;
@@ -167,6 +168,65 @@
       border-color: var(--bg-orange);
     }
 
+    .modal-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* شاشة كتابة أسماء الفرق */
+    .setup-card {
+      text-align: center;
+      padding: 20px;
+    }
+
+    /* شاشة الباركود */
+    .qr-section {
+      text-align: center;
+      margin: 10px 0;
+      padding: 20px;
+      background: var(--bg-cream);
+      border-radius: 16px;
+      border: 3px dashed var(--border-black);
+    }
+
+    .qr-code-img {
+      max-width: 200px;
+      border: 3px solid var(--border-black);
+      border-radius: 12px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .share-link {
+      background: var(--bg-yellow);
+      border: 3px solid var(--border-black);
+      border-radius: 12px;
+      padding: 10px;
+      margin: 10px 0;
+      word-break: break-all;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .qr-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    /* شاشة المقدم - الأسئلة */
+    .presenter-screen {
+      width: 100%;
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
     .quiz-image {
       width: 100%;
       height: 300px;
@@ -181,20 +241,15 @@
       margin-bottom: 15px;
     }
 
-    .presenter-controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .control-full {
-      grid-column: 1 / -1;
-    }
-
-    @media (max-width: 768px) {
-      .mode-selection {
-        grid-template-columns: 1fr;
-      }
+    .answer-display {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: var(--bg-cream);
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+      min-height: 70px;
+      color: var(--bg-green);
     }
 
     .score-display {
@@ -204,12 +259,8 @@
       font-size: 1.2rem;
     }
 
-    .score-team1 {
-      color: #3b82f6;
-    }
-    .score-team2 {
-      color: #ec4899;
-    }
+    .score-team1 { color: #3b82f6; }
+    .score-team2 { color: #ec4899; }
 
     .team-buttons {
       display: grid;
@@ -254,24 +305,10 @@
       pointer-events: none;
     }
 
-    .answer-display {
-      font-size: 2.5rem;
-      font-weight: 900;
-      background: var(--bg-cream);
-      padding: 15px;
-      border-radius: 12px;
-      text-align: center;
-      min-height: 70px;
-      color: var(--bg-green);
-    }
-
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
+    .presenter-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
-      flex-wrap: wrap;
     }
 
     .winner-text {
@@ -285,39 +322,6 @@
       border: 2px solid var(--border-black);
     }
 
-    /* شاشة البداية للمقدم */
-    .presenter-home-card {
-      text-align: center;
-      padding: 40px 20px;
-    }
-    .presenter-home-card .big-icon {
-      font-size: 5rem;
-      margin-bottom: 10px;
-    }
-    .presenter-home-card h2 {
-      font-size: 2rem;
-      margin-bottom: 5px;
-    }
-    .presenter-home-card p {
-      color: #666;
-      margin-bottom: 20px;
-    }
-    .presenter-home-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-top: 15px;
-    }
-    .presenter-home-buttons .control-full {
-      grid-column: 1 / -1;
-    }
-
-    .settings-group {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
     .round-info {
       font-size: 0.9rem;
       color: #666;
@@ -327,8 +331,8 @@
 
     .btn-start {
       background-color: #ff8c00;
-      font-size: 1.5rem;
-      padding: 18px;
+      font-size: 1.3rem;
+      padding: 15px;
       box-shadow: 0 8px 0 #b35f00;
       border-color: #b35f00;
       color: #fff;
@@ -339,14 +343,19 @@
       box-shadow: 0 0 0 #b35f00;
     }
 
-    .modal-title {
-      font-size: 1.8rem;
-      font-weight: 900;
-      margin-bottom: 20px;
-      text-align: center;
+    @media (max-width: 768px) {
+      .presenter-screen {
+        grid-template-columns: 1fr;
+      }
+      .mode-selection {
+        grid-template-columns: 1fr;
+      }
+      .qr-buttons {
+        grid-template-columns: 1fr;
+      }
     }
 
-    /* شاشة المشاهدين - نفس شاشة المقدم لكن بدون أزرار */
+    /* شاشة المشاهدين */
     .viewer-game {
       width: 100%;
       max-width: 800px;
@@ -355,15 +364,11 @@
       height: 350px;
       font-size: 7rem;
     }
-    .viewer-game .answer-display {
-      font-size: 3rem;
-      min-height: 80px;
-    }
   </style>
 </head>
 <body>
 
-  <!-- HOME SCREEN الرئيسية -->
+  <!-- HOME SCREEN -->
   <div id="screen-home" class="screen active">
     <div class="home-container">
       <h1 class="sticker-text" style="font-size: 2.5rem; margin-bottom: 20px;">تحدي الصور 🎮</h1>
@@ -393,23 +398,53 @@
     </div>
   </div>
 
-  <!-- شاشة المقدم - البداية -->
-  <div id="screen-presenter-home" class="screen">
-    <div class="neo-card presenter-home-card" style="max-width: 500px;">
-      <div class="big-icon">🎤</div>
-      <h2>مرحباً بك!</h2>
-      <p>اضغط على الزر أدناه لبدء اللعبة</p>
+  <!-- ====== شاشة 1: كتابة أسماء الفرق ====== -->
+  <div id="screen-setup" class="screen">
+    <div class="neo-card setup-card" style="max-width: 500px;">
+      <h2 class="modal-title">🎤 العرض التقديمي</h2>
       
-      <button onclick="startGame()" class="neo-btn btn-start control-full" style="font-size: 1.3rem; padding: 15px;">
-        🚀 بدء اللعبة
-      </button>
+      <div style="display: flex; flex-direction: column; gap: 15px;">
+        <div class="input-group">
+          <label>اسم الفريق الأول:</label>
+          <input type="text" id="setup-team1" class="neo-input" placeholder="مثلاً: النمور" value="النمور 🐯">
+        </div>
+        
+        <div class="input-group">
+          <label>اسم الفريق الثاني:</label>
+          <input type="text" id="setup-team2" class="neo-input" placeholder="مثلاً: الأسود" value="الأسود 🦁">
+        </div>
 
-      <div class="presenter-home-buttons">
-        <button onclick="copyPresenterLink()" class="neo-btn btn-purple">
-          📋 نسخ رابط العرض
+        <button onclick="goToQR()" class="neo-btn btn-start control-full">
+          🚀 ابدأ
         </button>
-        <button onclick="openSettings()" class="neo-btn btn-cream">
-          ⚙️ الإعدادات
+
+        <button onclick="goHome()" class="neo-btn btn-cream control-full">
+          ← رجوع
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== شاشة 2: الباركود + زر بدء + إعدادات ====== -->
+  <div id="screen-qr" class="screen">
+    <div class="neo-card" style="max-width: 500px;">
+      <h2 class="modal-title">📱 شارك الرابط</h2>
+      
+      <div class="qr-section">
+        <p style="font-weight: 700; margin-bottom: 15px;">امسح الباركود أو شارك الرابط:</p>
+        <img id="qr-code-img" src="" alt="QR Code" class="qr-code-img">
+        <div class="share-link" id="qr-link-display">جاري التحميل...</div>
+        <button onclick="copyLink()" class="neo-btn btn-purple" style="width: 100%; font-size: 0.9rem; padding: 10px;">
+          📋 نسخ الرابط
+        </button>
+      </div>
+
+      <div class="qr-buttons">
+        <button onclick="startGame()" class="neo-btn btn-start" style="font-size: 1.2rem;">
+          🚀 ابدأ
+        </button>
+        <button onclick="openSettings()" class="neo-btn btn-cream" style="font-size: 1.2rem;">
+          ⚙️ إعدادات
         </button>
       </div>
 
@@ -419,60 +454,33 @@
     </div>
   </div>
 
-  <!-- شاشة الإعدادات -->
-  <div id="screen-settings" class="screen">
-    <div class="neo-card" style="max-width: 500px;">
-      <h2 class="modal-title">⚙️ الإعدادات</h2>
-      
-      <div class="settings-group">
-        <div class="input-group">
-          <label>اسم الفريق الأول:</label>
-          <input type="text" id="settings-team1" class="neo-input" placeholder="مثلاً: النمور" value="النمور 🐯">
-        </div>
-        
-        <div class="input-group">
-          <label>اسم الفريق الثاني:</label>
-          <input type="text" id="settings-team2" class="neo-input" placeholder="مثلاً: الأسود" value="الأسود 🦁">
-        </div>
-
-        <button onclick="saveSettings()" class="neo-btn btn-green control-full">
-          ✅ حفظ الإعدادات
-        </button>
-
-        <button onclick="goToPresenterHome()" class="neo-btn btn-cream control-full">
-          ← رجوع
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- شاشة المقدم - اللعب (بأزرار التحكم) -->
-  <div id="screen-presenter-game" class="screen">
+  <!-- ====== شاشة 3: المقدم - الأسئلة والتحكم ====== -->
+  <div id="screen-presenter" class="screen">
     <div style="width: 100%; max-width: 1200px;">
       <div class="neo-card" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
         <h2 class="sticker-text" style="font-size: 1.5rem; margin: 0;">🎤 المقدم</h2>
         <div class="score-display">
-          <span class="score-team1">🟦 <span id="game-team1">الفريق1</span>: <span id="game-team1-score">0</span></span>
-          <span class="score-team2">🟪 <span id="game-team2">الفريق2</span>: <span id="game-team2-score">0</span></span>
+          <span class="score-team1">🟦 <span id="p-team1">الفريق1</span>: <span id="p-team1-score">0</span></span>
+          <span class="score-team2">🟪 <span id="p-team2">الفريق2</span>: <span id="p-team2-score">0</span></span>
         </div>
         <button onclick="endGame()" class="neo-btn btn-red" style="width: auto; font-size: 0.9rem;">
           ⏹ إنهاء
         </button>
       </div>
 
-      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+      <div class="presenter-screen">
         <div>
-          <div class="quiz-image" id="game-quiz-image">🚀</div>
+          <div class="quiz-image" id="p-quiz-image">🚀</div>
 
           <div class="neo-card">
             <p style="font-weight: 700; margin-bottom: 5px;">الإجابة:</p>
-            <div id="game-answer-display" class="answer-display">❓</div>
+            <div id="p-answer-display" class="answer-display">❓</div>
           </div>
 
           <div class="neo-card">
             <div class="presenter-controls">
-              <button onclick="revealGameAnswer()" class="neo-btn btn-orange" id="game-reveal-btn">💡 كشف الإجابة</button>
-              <button onclick="nextGameQuestion()" class="neo-btn btn-green" id="game-next-btn">➡️ السؤال التالي</button>
+              <button onclick="revealAnswer()" class="neo-btn btn-orange" id="p-reveal-btn">💡 كشف الإجابة</button>
+              <button onclick="nextQuestion()" class="neo-btn btn-green" id="p-next-btn">➡️ السؤال التالي</button>
             </div>
             
             <div style="margin-top: 10px; text-align: center; font-weight: 700; color: #666;">
@@ -480,28 +488,28 @@
             </div>
             
             <div class="team-buttons">
-              <button class="btn-team1" id="game-team1-btn" onclick="markGameTeamCorrect(1)" disabled>
-                ✅ <span id="game-team1-label">الفريق1</span>
+              <button class="btn-team1" id="p-team1-btn" onclick="markTeamCorrect(1)" disabled>
+                ✅ <span id="p-team1-label">الفريق1</span>
               </button>
-              <button class="btn-team2" id="game-team2-btn" onclick="markGameTeamCorrect(2)" disabled>
-                ✅ <span id="game-team2-label">الفريق2</span>
+              <button class="btn-team2" id="p-team2-btn" onclick="markTeamCorrect(2)" disabled>
+                ✅ <span id="p-team2-label">الفريق2</span>
               </button>
             </div>
           </div>
 
-          <div id="game-winner-display" style="display: none;">
-            <div class="winner-text" id="game-winner-text">🏆 الفريق الفائز!</div>
+          <div id="p-winner-display" style="display: none;">
+            <div class="winner-text" id="p-winner-text">🏆 الفريق الفائز!</div>
           </div>
           
-          <div class="round-info">عدد الصور: <span id="game-current-round">1</span> / <span id="game-total-rounds">10</span></div>
+          <div class="round-info">عدد الصور: <span id="p-current-round">1</span> / <span id="p-total-rounds">10</span></div>
         </div>
 
         <div>
           <div class="neo-card">
             <p style="font-weight: 700; margin-bottom: 5px;">📊 النقاط</p>
             <div style="font-size: 1.5rem; font-weight: 800; text-align: center;">
-              <p style="color: #3b82f6;">🟦 <span id="game-team1-display2">الفريق1</span>: <span id="game-team1-score2">0</span></p>
-              <p style="color: #ec4899;">🟪 <span id="game-team2-display2">الفريق2</span>: <span id="game-team2-score2">0</span></p>
+              <p style="color: #3b82f6;">🟦 <span id="p-team1-display2">الفريق1</span>: <span id="p-team1-score2">0</span></p>
+              <p style="color: #ec4899;">🟪 <span id="p-team2-display2">الفريق2</span>: <span id="p-team2-score2">0</span></p>
             </div>
           </div>
 
@@ -518,36 +526,63 @@
     </div>
   </div>
 
-  <!-- شاشة المشاهدين - نفس الأسئلة والنقاط (بدون أزرار) -->
+  <!-- ====== شاشة 4: المشاهدين - نفس الأسئلة والنقاط (بدون أزرار) ====== -->
   <div id="screen-viewer" class="screen">
     <div style="width: 100%; max-width: 800px;">
       <div class="neo-card" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
         <h2 class="sticker-text" style="font-size: 1.5rem; margin: 0;">👁️ المشاهدين</h2>
         <div class="score-display">
-          <span class="score-team1">🟦 <span id="viewer-team1">الفريق1</span>: <span id="viewer-team1-score">0</span></span>
-          <span class="score-team2">🟪 <span id="viewer-team2">الفريق2</span>: <span id="viewer-team2-score">0</span></span>
+          <span class="score-team1">🟦 <span id="v-team1">الفريق1</span>: <span id="v-team1-score">0</span></span>
+          <span class="score-team2">🟪 <span id="v-team2">الفريق2</span>: <span id="v-team2-score">0</span></span>
         </div>
         <button onclick="goHome()" class="neo-btn btn-cream" style="width: auto; font-size: 0.9rem;">
           🏠 خروج
         </button>
       </div>
 
-      <div class="quiz-image" id="viewer-quiz-image">🚀</div>
+      <div class="quiz-image" id="v-quiz-image">🚀</div>
 
       <div class="neo-card">
         <p style="font-weight: 700; margin-bottom: 5px;">الإجابة:</p>
-        <div id="viewer-answer-display" class="answer-display">❓</div>
+        <div id="v-answer-display" class="answer-display">❓</div>
       </div>
 
       <div class="neo-card" style="text-align: center; background: var(--bg-cream);">
         <p style="font-weight: 700; font-size: 1.1rem;">⏳ انتظر المقدم ليكشف الإجابة ويختار الفريق الفائز</p>
       </div>
 
-      <div id="viewer-winner-display" style="display: none;">
-        <div class="winner-text" id="viewer-winner-text">🏆 الفريق الفائز!</div>
+      <div id="v-winner-display" style="display: none;">
+        <div class="winner-text" id="v-winner-text">🏆 الفريق الفائز!</div>
       </div>
 
-      <div class="round-info">عدد الصور: <span id="viewer-current-round">1</span> / <span id="viewer-total-rounds">10</span></div>
+      <div class="round-info">عدد الصور: <span id="v-current-round">1</span> / <span id="v-total-rounds">10</span></div>
+    </div>
+  </div>
+
+  <!-- ====== شاشة الإعدادات ====== -->
+  <div id="screen-settings" class="screen">
+    <div class="neo-card" style="max-width: 500px;">
+      <h2 class="modal-title">⚙️ الإعدادات</h2>
+      
+      <div style="display: flex; flex-direction: column; gap: 15px;">
+        <div class="input-group">
+          <label>اسم الفريق الأول:</label>
+          <input type="text" id="settings-team1" class="neo-input" placeholder="مثلاً: النمور" value="النمور 🐯">
+        </div>
+        
+        <div class="input-group">
+          <label>اسم الفريق الثاني:</label>
+          <input type="text" id="settings-team2" class="neo-input" placeholder="مثلاً: الأسود" value="الأسود 🦁">
+        </div>
+
+        <button onclick="saveSettings()" class="neo-btn btn-green control-full">
+          ✅ حفظ الإعدادات
+        </button>
+
+        <button onclick="goToQR()" class="neo-btn btn-cream control-full">
+          ← رجوع
+        </button>
+      </div>
     </div>
   </div>
 
@@ -721,6 +756,14 @@
       box-shadow: 4px 4px 0px var(--border-black);
       margin-bottom: 20px;
     }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
   </style>
 
   <script>
@@ -745,8 +788,6 @@
 
     // ========== الحالة ==========
     let gameState = {
-      mode: null,
-      
       team1Name: 'النمور 🐯',
       team2Name: 'الأسود 🦁',
       team1Score: 0,
@@ -779,9 +820,208 @@
       document.getElementById(id).classList.add('active');
     }
 
+    // ========== عرض تقديمي ==========
+    function startPresentationMode() {
+      loadSettings();
+      showScreen('screen-setup');
+    }
+
+    function goToQR() {
+      // حفظ أسماء الفرق من شاشة الإعداد
+      const team1 = document.getElementById('setup-team1').value.trim() || 'النمور 🐯';
+      const team2 = document.getElementById('setup-team2').value.trim() || 'الأسود 🦁';
+      gameState.team1Name = team1;
+      gameState.team2Name = team2;
+      
+      // توليد الرابط
+      const url = window.location.href.split('?')[0] + '?viewer=true';
+      document.getElementById('qr-link-display').textContent = url;
+      
+      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+      document.getElementById('qr-code-img').src = qrUrl;
+      
+      showScreen('screen-qr');
+    }
+
+    function openSettings() {
+      document.getElementById('settings-team1').value = gameState.team1Name;
+      document.getElementById('settings-team2').value = gameState.team2Name;
+      showScreen('screen-settings');
+    }
+
+    function saveSettings() {
+      const team1 = document.getElementById('settings-team1').value.trim() || 'النمور 🐯';
+      const team2 = document.getElementById('settings-team2').value.trim() || 'الأسود 🦁';
+      gameState.team1Name = team1;
+      gameState.team2Name = team2;
+      localStorage.setItem('team1_name', team1);
+      localStorage.setItem('team2_name', team2);
+      alert('✅ تم حفظ الإعدادات!');
+      goToQR();
+    }
+
+    function loadSettings() {
+      const team1 = localStorage.getItem('team1_name') || 'النمور 🐯';
+      const team2 = localStorage.getItem('team2_name') || 'الأسود 🦁';
+      gameState.team1Name = team1;
+      gameState.team2Name = team2;
+      document.getElementById('setup-team1').value = team1;
+      document.getElementById('setup-team2').value = team2;
+    }
+
+    function copyLink() {
+      const text = document.getElementById('qr-link-display').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('✅ تم نسخ الرابط!');
+      }).catch(() => {
+        const input = document.createElement('input');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        alert('✅ تم نسخ الرابط!');
+      });
+    }
+
+    // ========== بدء اللعبة (المقدم) ==========
+    function startGame() {
+      gameState.team1Score = 0;
+      gameState.team2Score = 0;
+      gameState.currentRiddleIndex = 0;
+      gameState.answerRevealed = false;
+      gameState.roundEnded = false;
+      
+      // تحديث أسماء الفرق في شاشة المقدم
+      document.getElementById('p-team1').textContent = gameState.team1Name;
+      document.getElementById('p-team2').textContent = gameState.team2Name;
+      document.getElementById('p-team1-display2').textContent = gameState.team1Name;
+      document.getElementById('p-team2-display2').textContent = gameState.team2Name;
+      document.getElementById('p-team1-label').textContent = gameState.team1Name;
+      document.getElementById('p-team2-label').textContent = gameState.team2Name;
+      
+      // تحديث أسماء الفرق في شاشة المشاهدين
+      document.getElementById('v-team1').textContent = gameState.team1Name;
+      document.getElementById('v-team2').textContent = gameState.team2Name;
+      
+      document.getElementById('p-total-rounds').textContent = RIDDLES.length;
+      document.getElementById('v-total-rounds').textContent = RIDDLES.length;
+      
+      showScreen('screen-presenter');
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      let riddle = RIDDLES[gameState.currentRiddleIndex % RIDDLES.length];
+      
+      // تحديث شاشة المقدم
+      document.getElementById('p-quiz-image').textContent = riddle.emoji.join(' + ');
+      document.getElementById('p-answer-display').textContent = '❓';
+      document.getElementById('p-current-round').textContent = gameState.currentRiddleIndex + 1;
+      
+      // تحديث شاشة المشاهدين
+      document.getElementById('v-quiz-image').textContent = riddle.emoji.join(' + ');
+      document.getElementById('v-answer-display').textContent = '❓';
+      document.getElementById('v-current-round').textContent = gameState.currentRiddleIndex + 1;
+      
+      gameState.answerRevealed = false;
+      gameState.roundEnded = false;
+      
+      document.getElementById('p-team1-btn').disabled = true;
+      document.getElementById('p-team2-btn').disabled = true;
+      document.getElementById('p-reveal-btn').disabled = false;
+      document.getElementById('p-winner-display').style.display = 'none';
+      document.getElementById('v-winner-display').style.display = 'none';
+      
+      updateScores();
+    }
+
+    function updateScores() {
+      // تحديث شاشة المقدم
+      document.getElementById('p-team1-score').textContent = gameState.team1Score;
+      document.getElementById('p-team2-score').textContent = gameState.team2Score;
+      document.getElementById('p-team1-score2').textContent = gameState.team1Score;
+      document.getElementById('p-team2-score2').textContent = gameState.team2Score;
+      
+      // تحديث شاشة المشاهدين
+      document.getElementById('v-team1-score').textContent = gameState.team1Score;
+      document.getElementById('v-team2-score').textContent = gameState.team2Score;
+    }
+
+    function revealAnswer() {
+      let riddle = RIDDLES[gameState.currentRiddleIndex % RIDDLES.length];
+      
+      document.getElementById('p-answer-display').textContent = riddle.answer + ' (' + riddle.hint + ')';
+      document.getElementById('v-answer-display').textContent = riddle.answer + ' (' + riddle.hint + ')';
+      
+      gameState.answerRevealed = true;
+      
+      document.getElementById('p-team1-btn').disabled = false;
+      document.getElementById('p-team2-btn').disabled = false;
+      document.getElementById('p-reveal-btn').disabled = true;
+    }
+
+    function markTeamCorrect(team) {
+      if (!gameState.answerRevealed) {
+        alert('⚠️ كشف الإجابة أولاً!');
+        return;
+      }
+      
+      if (gameState.roundEnded) {
+        alert('⚠️ الجولة انتهت!');
+        return;
+      }
+      
+      gameState.roundEnded = true;
+      
+      let winnerName = '';
+      if (team === 1) {
+        gameState.team1Score += 1;
+        winnerName = gameState.team1Name;
+        document.getElementById('p-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
+        document.getElementById('p-winner-text').style.color = '#3b82f6';
+        document.getElementById('v-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
+        document.getElementById('v-winner-text').style.color = '#3b82f6';
+      } else {
+        gameState.team2Score += 1;
+        winnerName = gameState.team2Name;
+        document.getElementById('p-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
+        document.getElementById('p-winner-text').style.color = '#ec4899';
+        document.getElementById('v-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
+        document.getElementById('v-winner-text').style.color = '#ec4899';
+      }
+      
+      document.getElementById('p-winner-display').style.display = 'block';
+      document.getElementById('v-winner-display').style.display = 'block';
+      document.getElementById('p-team1-btn').disabled = true;
+      document.getElementById('p-team2-btn').disabled = true;
+      
+      updateScores();
+    }
+
+    function nextQuestion() {
+      if (!gameState.roundEnded) {
+        alert('⚠️ اختر الفريق الفائز أولاً!');
+        return;
+      }
+      
+      gameState.currentRiddleIndex++;
+      if (gameState.currentRiddleIndex >= RIDDLES.length) {
+        alert('🎉 انتهت جميع الأسئلة! النتيجة النهائية:\n' + 
+              gameState.team1Name + ': ' + gameState.team1Score + ' نقطة\n' +
+              gameState.team2Name + ': ' + gameState.team2Score + ' نقطة');
+        endGame();
+        return;
+      }
+      loadQuestion();
+    }
+
+    function endGame() {
+      showScreen('screen-qr');
+    }
+
     // ========== SOLO ==========
     function startSoloMode() {
-      gameState.mode = 'solo';
       gameState.soloCoins = 100;
       gameState.soloLevel = 1;
       showScreen('screen-solo');
@@ -890,7 +1130,6 @@
     }
 
     function startMultiplayer() {
-      gameState.mode = 'multiplayer';
       gameState.multiP1Name = document.getElementById('player1-name').value || 'اللاعب1';
       gameState.multiP2Name = document.getElementById('player2-name').value || 'اللاعب2';
       gameState.multiP1Score = 0;
@@ -995,219 +1234,25 @@
       goHome();
     }
 
-    // ========== PRESENTATION MODE ==========
-    function startPresentationMode() {
-      loadSettings();
-      showScreen('screen-presenter-home');
-    }
-
-    function loadSettings() {
-      const team1 = localStorage.getItem('team1_name') || 'النمور 🐯';
-      const team2 = localStorage.getItem('team2_name') || 'الأسود 🦁';
-      document.getElementById('settings-team1').value = team1;
-      document.getElementById('settings-team2').value = team2;
-      gameState.team1Name = team1;
-      gameState.team2Name = team2;
-    }
-
-    function saveSettings() {
-      const team1 = document.getElementById('settings-team1').value.trim() || 'النمور 🐯';
-      const team2 = document.getElementById('settings-team2').value.trim() || 'الأسود 🦁';
-      localStorage.setItem('team1_name', team1);
-      localStorage.setItem('team2_name', team2);
-      gameState.team1Name = team1;
-      gameState.team2Name = team2;
-      alert('✅ تم حفظ الإعدادات!');
-      goToPresenterHome();
-    }
-
-    function openSettings() {
-      loadSettings();
-      showScreen('screen-settings');
-    }
-
-    function goToPresenterHome() {
-      showScreen('screen-presenter-home');
-    }
-
-    function copyPresenterLink() {
-      const url = window.location.href.split('?')[0] + '?mode=presenter';
-      navigator.clipboard.writeText(url).then(() => {
-        alert('✅ تم نسخ رابط العرض!');
-      }).catch(() => {
-        const input = document.createElement('input');
-        input.value = url;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-        alert('✅ تم نسخ الرابط!');
-      });
-    }
-
-    // ========== بدء اللعبة ==========
-    function startGame() {
-      loadSettings();
-      
-      gameState.team1Score = 0;
-      gameState.team2Score = 0;
-      gameState.currentRiddleIndex = 0;
-      gameState.answerRevealed = false;
-      gameState.roundEnded = false;
-      
-      // تحديث أسماء الفرق في شاشة المقدم
-      document.getElementById('game-team1').textContent = gameState.team1Name;
-      document.getElementById('game-team2').textContent = gameState.team2Name;
-      document.getElementById('game-team1-display2').textContent = gameState.team1Name;
-      document.getElementById('game-team2-display2').textContent = gameState.team2Name;
-      document.getElementById('game-team1-label').textContent = gameState.team1Name;
-      document.getElementById('game-team2-label').textContent = gameState.team2Name;
-      
-      // تحديث أسماء الفرق في شاشة المشاهدين
-      document.getElementById('viewer-team1').textContent = gameState.team1Name;
-      document.getElementById('viewer-team2').textContent = gameState.team2Name;
-      
-      document.getElementById('game-total-rounds').textContent = RIDDLES.length;
-      document.getElementById('viewer-total-rounds').textContent = RIDDLES.length;
-      
-      showScreen('screen-presenter-game');
-      loadGameQuestion();
-      updateViewerDisplay();
-    }
-
-    function loadGameQuestion() {
-      let riddle = RIDDLES[gameState.currentRiddleIndex % RIDDLES.length];
-      
-      // تحديث شاشة المقدم
-      document.getElementById('game-quiz-image').textContent = riddle.emoji.join(' + ');
-      document.getElementById('game-answer-display').textContent = '❓';
-      document.getElementById('game-current-round').textContent = gameState.currentRiddleIndex + 1;
-      
-      // تحديث شاشة المشاهدين
-      document.getElementById('viewer-quiz-image').textContent = riddle.emoji.join(' + ');
-      document.getElementById('viewer-answer-display').textContent = '❓';
-      document.getElementById('viewer-current-round').textContent = gameState.currentRiddleIndex + 1;
-      
-      gameState.answerRevealed = false;
-      gameState.roundEnded = false;
-      
-      document.getElementById('game-team1-btn').disabled = true;
-      document.getElementById('game-team2-btn').disabled = true;
-      document.getElementById('game-reveal-btn').disabled = false;
-      document.getElementById('game-winner-display').style.display = 'none';
-      document.getElementById('viewer-winner-display').style.display = 'none';
-      
-      updateGameScore();
-      updateViewerDisplay();
-    }
-
-    function updateGameScore() {
-      document.getElementById('game-team1-score').textContent = gameState.team1Score;
-      document.getElementById('game-team2-score').textContent = gameState.team2Score;
-      document.getElementById('game-team1-score2').textContent = gameState.team1Score;
-      document.getElementById('game-team2-score2').textContent = gameState.team2Score;
-      
-      updateViewerDisplay();
-    }
-
-    function updateViewerDisplay() {
-      document.getElementById('viewer-team1-score').textContent = gameState.team1Score;
-      document.getElementById('viewer-team2-score').textContent = gameState.team2Score;
-    }
-
-    function revealGameAnswer() {
-      let riddle = RIDDLES[gameState.currentRiddleIndex % RIDDLES.length];
-      
-      document.getElementById('game-answer-display').textContent = riddle.answer + ' (' + riddle.hint + ')';
-      document.getElementById('viewer-answer-display').textContent = riddle.answer + ' (' + riddle.hint + ')';
-      
-      gameState.answerRevealed = true;
-      
-      document.getElementById('game-team1-btn').disabled = false;
-      document.getElementById('game-team2-btn').disabled = false;
-      document.getElementById('game-reveal-btn').disabled = true;
-    }
-
-    function markGameTeamCorrect(team) {
-      if (!gameState.answerRevealed) {
-        alert('⚠️ كشف الإجابة أولاً!');
-        return;
-      }
-      
-      if (gameState.roundEnded) {
-        alert('⚠️ الجولة انتهت!');
-        return;
-      }
-      
-      gameState.roundEnded = true;
-      
-      let winnerName = '';
-      if (team === 1) {
-        gameState.team1Score += 1;
-        winnerName = gameState.team1Name;
-        document.getElementById('game-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
-        document.getElementById('game-winner-text').style.color = '#3b82f6';
-        document.getElementById('viewer-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
-        document.getElementById('viewer-winner-text').style.color = '#3b82f6';
-      } else {
-        gameState.team2Score += 1;
-        winnerName = gameState.team2Name;
-        document.getElementById('game-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
-        document.getElementById('game-winner-text').style.color = '#ec4899';
-        document.getElementById('viewer-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
-        document.getElementById('viewer-winner-text').style.color = '#ec4899';
-      }
-      
-      document.getElementById('game-winner-display').style.display = 'block';
-      document.getElementById('viewer-winner-display').style.display = 'block';
-      document.getElementById('game-team1-btn').disabled = true;
-      document.getElementById('game-team2-btn').disabled = true;
-      
-      updateGameScore();
-      updateViewerDisplay();
-    }
-
-    function nextGameQuestion() {
-      if (!gameState.roundEnded) {
-        alert('⚠️ اختر الفريق الفائز أولاً!');
-        return;
-      }
-      
-      gameState.currentRiddleIndex++;
-      if (gameState.currentRiddleIndex >= RIDDLES.length) {
-        alert('🎉 انتهت جميع الأسئلة! النتيجة النهائية:\n' + 
-              gameState.team1Name + ': ' + gameState.team1Score + ' نقطة\n' +
-              gameState.team2Name + ': ' + gameState.team2Score + ' نقطة');
-        endGame();
-        return;
-      }
-      loadGameQuestion();
-    }
-
-    function endGame() {
-      showScreen('screen-presenter-home');
-    }
-
     // ========== التشغيل عند تحميل الصفحة ==========
     window.onload = function() {
       const params = new URLSearchParams(window.location.search);
-      const mode = params.get('mode');
+      const viewer = params.get('viewer');
       
       loadSettings();
       
-      if (mode === 'presenter') {
-        showScreen('screen-presenter-home');
-      } else {
-        // المشاهدين - يظهر لهم نفس الأسئلة والنقاط
-        showScreen('screen-viewer');
-        // تحميل السؤال الأول
+      if (viewer === 'true') {
+        // شاشة المشاهدين
+        document.getElementById('v-team1').textContent = gameState.team1Name;
+        document.getElementById('v-team2').textContent = gameState.team2Name;
+        document.getElementById('v-total-rounds').textContent = RIDDLES.length;
         let riddle = RIDDLES[0];
-        document.getElementById('viewer-quiz-image').textContent = riddle.emoji.join(' + ');
-        document.getElementById('viewer-answer-display').textContent = '❓';
-        document.getElementById('viewer-current-round').textContent = '1';
-        document.getElementById('viewer-total-rounds').textContent = RIDDLES.length;
-        document.getElementById('viewer-team1').textContent = gameState.team1Name;
-        document.getElementById('viewer-team2').textContent = gameState.team2Name;
+        document.getElementById('v-quiz-image').textContent = riddle.emoji.join(' + ');
+        document.getElementById('v-answer-display').textContent = '❓';
+        document.getElementById('v-current-round').textContent = '1';
+        showScreen('screen-viewer');
+      } else {
+        showScreen('screen-home');
       }
     };
   </script>
