@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>تحدي الصور</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-cream: #fff8e3;
+      --bg-yellow: #ffb803;
+      --bg-orange: #f5875f;
+      --bg-red: #ef4444;
+      --bg-green: #5dcf72;
+      --bg-blue: #3b82f6;
+      --border-black: #181916;
+      --card-shadow: 6px 6px 0px var(--border-black);
+      --btn-shadow: 0px 6px 0px var(--border-black);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      background-image: radial-gradient(rgba(24, 25, 22, 0.1) 2px, transparent 2px);
+      background-size: 24px 24px;
+      color: var(--border-black);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .screen {
+      display: none;
+      width: 100%;
+      max-width: 900px;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .screen.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .neo-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 3px solid var(--border-black);
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: var(--btn-shadow);
+      transition: transform 0.1s, box-shadow 0.1s;
+      padding: 12px 24px;
+      outline: none;
+    }
+
+    .neo-btn:active {
+      transform: translateY(6px);
+      box-shadow: 0px 0px 0px var(--border-black);
+    }
+
+    .btn-green { background-color: var(--bg-green); }
+    .btn-orange { background-color: var(--bg-orange); }
+    .btn-blue { background-color: var(--bg-blue); }
+    .btn-red { background-color: var(--bg-red); }
+    .btn-cream { background-color: #fff; color: var(--border-black); text-shadow: none; }
+    .btn-purple { background-color: #8b5cf6; }
+    .btn-gold { background-color: #f59e0b; }
+
+    .neo-card {
+      background-color: #fff;
+      border: 3px solid var(--border-black);
+      border-radius: 24px;
+      box-shadow: var(--card-shadow);
+      padding: 24px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .sticker-text {
+      font-weight: 900;
+      color: var(--border-black);
+      text-align: center;
+      letter-spacing: -1px;
+      text-shadow: 
+        -3px -3px 0 #fff,  3px -3px 0 #fff,
+        -3px  3px 0 #fff,  3px  3px 0 #fff,
+        -4px  0px 0 #fff,  4px  0px 0 #fff,
+         0px -4px 0 #fff,  0px  4px 0 #fff;
+    }
+
+    .home-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .mode-selection {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      width: 100%;
+    }
+
+    .mode-btn {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .mode-icon {
+      font-size: 3rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-group label {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .neo-input {
+      border: 3px solid var(--border-black);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      outline: none;
+      width: 100%;
+      box-shadow: inset 2px 2px 0px rgba(0,0,0,0.1);
+    }
+
+    .neo-input:focus {
+      border-color: var(--bg-orange);
+    }
+
+    .quiz-image {
+      width: 100%;
+      height: 300px;
+      border: 3px solid var(--border-black);
+      border-radius: 18px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 6rem;
+      box-shadow: 4px 4px 0px var(--border-black);
+      margin-bottom: 15px;
+    }
+
+    .presenter-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .control-full {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 768px) {
+      .mode-selection {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .score-display {
+      display: flex;
+      gap: 30px;
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
+
+    .score-team1 {
+      color: #3b82f6;
+    }
+    .score-team2 {
+      color: #ec4899;
+    }
+
+    .team-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .btn-team1 {
+      background: #3b82f6;
+      border: 3px solid var(--border-black);
+      border-radius: 16px;
+      padding: 15px;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: var(--btn-shadow);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    .btn-team2 {
+      background: #ec4899;
+      border: 3px solid var(--border-black);
+      border-radius: 16px;
+      padding: 15px;
+      font-weight: 800;
+      font-size: 1.2rem;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: var(--btn-shadow);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    .btn-team1:active, .btn-team2:active {
+      transform: translateY(6px);
+      box-shadow: 0px 0px 0px var(--border-black);
+    }
+
+    .btn-team1:disabled, .btn-team2:disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .answer-display {
+      font-size: 2.5rem;
+      font-weight: 900;
+      background: var(--bg-cream);
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+      min-height: 70px;
+      color: var(--bg-green);
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .winner-text {
+      font-size: 1.5rem;
+      font-weight: 900;
+      text-align: center;
+      margin-top: 10px;
+      padding: 10px;
+      background: var(--bg-yellow);
+      border-radius: 12px;
+      border: 2px solid var(--border-black);
+    }
+
+    /* شاشة البداية للمقدم */
+    .presenter-home-card {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .presenter-home-card .big-icon {
+      font-size: 5rem;
+      margin-bottom: 10px;
+    }
+    .presenter-home-card h2 {
+      font-size: 2rem;
+      margin-bottom: 5px;
+    }
+    .presenter-home-card p {
+      color: #666;
+      margin-bottom: 20px;
+    }
+    .presenter-home-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .presenter-home-buttons .control-full {
+      grid-column: 1 / -1;
+    }
+
+    .settings-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .round-info {
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
+      margin-top: 5px;
+    }
+
+    .btn-start {
+      background-color: #ff8c00;
+      font-size: 1.5rem;
+      padding: 18px;
+      box-shadow: 0 8px 0 #b35f00;
+      border-color: #b35f00;
+      color: #fff;
+      text-shadow: 1px 1px 0 #b35f00;
+    }
+    .btn-start:active {
+      transform: translateY(8px);
+      box-shadow: 0 0 0 #b35f00;
+    }
+
+    .modal-title {
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* شاشة المشاهدين - نفس شاشة المقدم لكن بدون أزرار */
+    .viewer-game {
+      width: 100%;
+      max-width: 800px;
+    }
+    .viewer-game .quiz-image {
+      height: 350px;
+      font-size: 7rem;
+    }
+    .viewer-game .answer-display {
+      font-size: 3rem;
+      min-height: 80px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HOME SCREEN الرئيسية -->
+  <div id="screen-home" class="screen active">
+    <div class="home-container">
+      <h1 class="sticker-text" style="font-size: 2.5rem; margin-bottom: 20px;">تحدي الصور 🎮</h1>
+      
+      <div class="neo-card">
+        <p style="text-align: center; font-weight: 700; margin-bottom: 20px;">اختر نمط اللعب:</p>
+        
+        <div class="mode-selection">
+          <button onclick="startSoloMode()" class="neo-btn btn-orange mode-btn">
+            <span class="mode-icon">👤</span>
+            <span>فردي</span>
+          </button>
+          <button onclick="openMultiplayerSetup()" class="neo-btn btn-green mode-btn">
+            <span class="mode-icon">👥</span>
+            <span>جماعي</span>
+          </button>
+          <button onclick="startYoutubeMode()" class="neo-btn btn-red mode-btn">
+            <span class="mode-icon">📺</span>
+            <span>يوتيوب</span>
+          </button>
+          <button onclick="startPresentationMode()" class="neo-btn btn-blue mode-btn">
+            <span class="mode-icon">🎤</span>
+            <span>عرض تقديمي</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- شاشة المقدم - البداية -->
+  <div id="screen-presenter-home" class="screen">
+    <div class="neo-card presenter-home-card" style="max-width: 500px;">
+      <div class="big-icon">🎤</div>
+      <h2>مرحباً بك!</h2>
+      <p>اضغط على الزر أدناه لبدء اللعبة</p>
+      
+      <button onclick="startGame()" class="neo-btn btn-start control-full" style="font-size: 1.3rem; padding: 15px;">
+        🚀 بدء اللعبة
+      </button>
+
+      <div class="presenter-home-buttons">
+        <button onclick="copyPresenterLink()" class="neo-btn btn-purple">
+          📋 نسخ رابط العرض
+        </button>
+        <button onclick="openSettings()" class="neo-btn btn-cream">
+          ⚙️ الإعدادات
+        </button>
+      </div>
+
+      <button onclick="goHome()" class="neo-btn btn-cream control-full" style="margin-top: 10px;">
+        ← رجوع
+      </button>
+    </div>
+  </div>
+
+  <!-- شاشة الإعدادات -->
+  <div id="screen-settings" class="screen">
+    <div class="neo-card" style="max-width: 500px;">
+      <h2 class="modal-title">⚙️ الإعدادات</h2>
+      
+      <div class="settings-group">
+        <div class="input-group">
+          <label>اسم الفريق الأول:</label>
+          <input type="text" id="settings-team1" class="neo-input" placeholder="مثلاً: النمور" value="النمور 🐯">
+        </div>
+        
+        <div class="input-group">
+          <label>اسم الفريق الثاني:</label>
+          <input type="text" id="settings-team2" class="neo-input" placeholder="مثلاً: الأسود" value="الأسود 🦁">
+        </div>
+
+        <button onclick="saveSettings()" class="neo-btn btn-green control-full">
+          ✅ حفظ الإعدادات
+        </button>
+
+        <button onclick="goToPresenterHome()" class="neo-btn btn-cream control-full">
+          ← رجوع
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- شاشة المقدم - اللعب (بأزرار التحكم) -->
+  <div id="screen-presenter-game" class="screen">
+    <div style="width: 100%; max-width: 1200px;">
+      <div class="neo-card" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <h2 class="sticker-text" style="font-size: 1.5rem; margin: 0;">🎤 المقدم</h2>
+        <div class="score-display">
+          <span class="score-team1">🟦 <span id="game-team1">الفريق1</span>: <span id="game-team1-score">0</span></span>
+          <span class="score-team2">🟪 <span id="game-team2">الفريق2</span>: <span id="game-team2-score">0</span></span>
+        </div>
+        <button onclick="endGame()" class="neo-btn btn-red" style="width: auto; font-size: 0.9rem;">
+          ⏹ إنهاء
+        </button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+        <div>
+          <div class="quiz-image" id="game-quiz-image">🚀</div>
+
+          <div class="neo-card">
+            <p style="font-weight: 700; margin-bottom: 5px;">الإجابة:</p>
+            <div id="game-answer-display" class="answer-display">❓</div>
+          </div>
+
+          <div class="neo-card">
+            <div class="presenter-controls">
+              <button onclick="revealGameAnswer()" class="neo-btn btn-orange" id="game-reveal-btn">💡 كشف الإجابة</button>
+              <button onclick="nextGameQuestion()" class="neo-btn btn-green" id="game-next-btn">➡️ السؤال التالي</button>
+            </div>
+            
+            <div style="margin-top: 10px; text-align: center; font-weight: 700; color: #666;">
+              من أجاب الإجابة الصحيحة؟
+            </div>
+            
+            <div class="team-buttons">
+              <button class="btn-team1" id="game-team1-btn" onclick="markGameTeamCorrect(1)" disabled>
+                ✅ <span id="game-team1-label">الفريق1</span>
+              </button>
+              <button class="btn-team2" id="game-team2-btn" onclick="markGameTeamCorrect(2)" disabled>
+                ✅ <span id="game-team2-label">الفريق2</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="game-winner-display" style="display: none;">
+            <div class="winner-text" id="game-winner-text">🏆 الفريق الفائز!</div>
+          </div>
+          
+          <div class="round-info">عدد الصور: <span id="game-current-round">1</span> / <span id="game-total-rounds">10</span></div>
+        </div>
+
+        <div>
+          <div class="neo-card">
+            <p style="font-weight: 700; margin-bottom: 5px;">📊 النقاط</p>
+            <div style="font-size: 1.5rem; font-weight: 800; text-align: center;">
+              <p style="color: #3b82f6;">🟦 <span id="game-team1-display2">الفريق1</span>: <span id="game-team1-score2">0</span></p>
+              <p style="color: #ec4899;">🟪 <span id="game-team2-display2">الفريق2</span>: <span id="game-team2-score2">0</span></p>
+            </div>
+          </div>
+
+          <div class="neo-card">
+            <p style="font-weight: 700; margin-bottom: 5px;">📌 التعليمات:</p>
+            <p style="font-size: 0.9rem; color: #666; line-height: 2;">
+              1. اضغط <strong>"كشف الإجابة"</strong><br>
+              2. اختر الفريق الفائز<br>
+              3. اضغط <strong>"السؤال التالي"</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- شاشة المشاهدين - نفس الأسئلة والنقاط (بدون أزرار) -->
+  <div id="screen-viewer" class="screen">
+    <div style="width: 100%; max-width: 800px;">
+      <div class="neo-card" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <h2 class="sticker-text" style="font-size: 1.5rem; margin: 0;">👁️ المشاهدين</h2>
+        <div class="score-display">
+          <span class="score-team1">🟦 <span id="viewer-team1">الفريق1</span>: <span id="viewer-team1-score">0</span></span>
+          <span class="score-team2">🟪 <span id="viewer-team2">الفريق2</span>: <span id="viewer-team2-score">0</span></span>
+        </div>
+        <button onclick="goHome()" class="neo-btn btn-cream" style="width: auto; font-size: 0.9rem;">
+          🏠 خروج
+        </button>
+      </div>
+
+      <div class="quiz-image" id="viewer-quiz-image">🚀</div>
+
+      <div class="neo-card">
+        <p style="font-weight: 700; margin-bottom: 5px;">الإجابة:</p>
+        <div id="viewer-answer-display" class="answer-display">❓</div>
+      </div>
+
+      <div class="neo-card" style="text-align: center; background: var(--bg-cream);">
+        <p style="font-weight: 700; font-size: 1.1rem;">⏳ انتظر المقدم ليكشف الإجابة ويختار الفريق الفائز</p>
+      </div>
+
+      <div id="viewer-winner-display" style="display: none;">
+        <div class="winner-text" id="viewer-winner-text">🏆 الفريق الفائز!</div>
+      </div>
+
+      <div class="round-info">عدد الصور: <span id="viewer-current-round">1</span> / <span id="viewer-total-rounds">10</span></div>
+    </div>
+  </div>
+
+  <!-- SOLO MODE -->
+  <div id="screen-solo" class="screen">
+    <div style="width: 100%; max-width: 600px;">
+      <div class="top-bar">
+        <button onclick="goHome()" class="neo-btn btn-cream" style="width: fit-content; padding: 6px 16px; font-size: 0.95rem;">خروج</button>
+        <div style="font-weight: 800; background: #f0e6d3; padding: 4px 12px; border-radius: 30px; border: 2px solid #181916;">
+          🪙 <span id="solo-coins-display">100</span>
+        </div>
+        <div style="font-weight: 800; background: #ffb803; padding: 4px 12px; border-radius: 30px; border: 2px solid #181916;">
+          جولة <span id="solo-level-display">1</span>
+        </div>
+      </div>
+
+      <div class="neo-card" style="position: relative;">
+        <div class="success-overlay" id="solo-victory" style="position: absolute; inset: 0; background-color: rgba(93, 207, 114, 0.95); border-radius: 20px; z-index: 10; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 20px;">
+          <h2 class="sticker-text" style="font-size: 2rem; color: #fff;">إجابة صحيحة! 🎉</h2>
+          <p id="solo-victory-meaning" style="font-weight: 700; color: #fff; font-size: 1rem;"></p>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 1.4rem; font-weight: 800; color: #fff;">
+            <span>+١٥</span>
+            <span>🪙</span>
+          </div>
+          <button onclick="nextSoloLevel()" class="neo-btn btn-cream" style="width: auto; margin-top: 10px;">المرحلة التالية</button>
+        </div>
+
+        <div class="riddle-image-box" id="solo-quiz-image" style="width: 100%; height: 200px;">🚀</div>
+
+        <div class="answer-blanks" id="solo-blanks-container" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;"></div>
+
+        <div class="keyboard-grid" id="solo-keyboard-container" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; width: 100%; margin-bottom: 20px;"></div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; margin-top: 20px; border-top: 2px dashed rgba(24, 25, 22, 0.15); padding-top: 15px;">
+          <button onclick="useHint('reveal')" class="neo-btn btn-cream" style="font-size: 0.85rem; padding: 8px 4px; border-radius: 12px; flex-direction: column; gap: 2px;">
+            <span>كشف حرف</span>
+            <span style="font-size: 0.75rem; background: rgba(0,0,0,0.15); padding: 1px 6px; border-radius: 20px; font-weight: bold;">20 🪙</span>
+          </button>
+          <button onclick="useHint('remove')" class="neo-btn btn-cream" style="font-size: 0.85rem; padding: 8px 4px; border-radius: 12px; flex-direction: column; gap: 2px;">
+            <span>حذف زائد</span>
+            <span style="font-size: 0.75rem; background: rgba(0,0,0,0.15); padding: 1px 6px; border-radius: 20px; font-weight: bold;">30 🪙</span>
+          </button>
+          <button onclick="useHint('skip')" class="neo-btn btn-cream" style="font-size: 0.85rem; padding: 8px 4px; border-radius: 12px; flex-direction: column; gap: 2px;">
+            <span>تخطي</span>
+            <span style="font-size: 0.75rem; background: rgba(0,0,0,0.15); padding: 1px 6px; border-radius: 20px; font-weight: bold;">50 🪙</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MULTIPLAYER SETUP -->
+  <div id="screen-multiplayer-setup" class="screen">
+    <div class="neo-card" style="max-width: 500px;">
+      <h2 class="modal-title">اللعب الجماعي</h2>
+      
+      <div style="display: flex; flex-direction: column; gap: 15px;">
+        <div class="input-group">
+          <label>اللاعب الأول:</label>
+          <input type="text" id="player1-name" class="neo-input" value="أبو عمر">
+        </div>
+        <div class="input-group">
+          <label>اللاعب الثاني:</label>
+          <input type="text" id="player2-name" class="neo-input" value="صديق أبو عمر">
+        </div>
+
+        <button onclick="startMultiplayer()" class="neo-btn btn-green control-full">
+          ابدأ
+        </button>
+
+        <button onclick="goHome()" class="neo-btn btn-cream control-full">
+          ← رجوع
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MULTIPLAYER GAME SCREEN -->
+  <div id="screen-multiplayer" class="screen">
+    <div style="width: 100%; max-width: 600px;">
+      <div class="top-bar">
+        <button onclick="goHome()" class="neo-btn btn-cream" style="width: fit-content; padding: 6px 16px; font-size: 0.95rem;">خروج</button>
+        <div style="display: flex; gap: 15px; font-weight: 800;">
+          <span id="multi-p1-name">اللاعب1</span>
+          <span id="multi-p1-score">0</span>
+          <span style="color: #999;">|</span>
+          <span id="multi-p2-name">اللاعب2</span>
+          <span id="multi-p2-score">0</span>
+        </div>
+        <div style="font-weight: 800; background: #ffb803; padding: 4px 12px; border-radius: 30px; border: 2px solid #181916;">
+          دور <span id="multi-turn-display">1</span>
+        </div>
+      </div>
+
+      <div class="neo-card" style="position: relative;">
+        <div class="success-overlay" id="multi-victory" style="position: absolute; inset: 0; background-color: rgba(93, 207, 114, 0.95); border-radius: 20px; z-index: 10; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px; padding: 20px;">
+          <h2 class="sticker-text" style="font-size: 2rem; color: #fff;">إجابة صحيحة! 🎉</h2>
+          <p id="multi-victory-meaning" style="font-weight: 700; color: #fff; font-size: 1rem;"></p>
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 1.4rem; font-weight: 800; color: #fff;">
+            <span>+١٠</span>
+            <span>⭐</span>
+          </div>
+          <button onclick="nextMultiplayerRound()" class="neo-btn btn-cream" style="width: auto; margin-top: 10px;">الدور التالي</button>
+        </div>
+
+        <div class="riddle-image-box" id="multi-quiz-image" style="width: 100%; height: 200px;">🚀</div>
+
+        <div class="answer-blanks" id="multi-blanks-container" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;"></div>
+
+        <div class="keyboard-grid" id="multi-keyboard-container" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; width: 100%; margin-bottom: 20px;"></div>
+
+        <button onclick="submitMultiAnswer()" class="neo-btn btn-green control-full" style="font-size: 1rem;">
+          ✓ أرسل إجابتك
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .success-overlay.active {
+      display: flex !important;
+    }
+    .blank-box {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--border-black);
+      border-radius: 10px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px var(--border-black);
+    }
+    .blank-box.filled {
+      background-color: var(--bg-yellow);
+      color: #fff;
+      text-shadow: 1px 1px 0px var(--border-black);
+    }
+    .key-btn {
+      height: 48px;
+      border: 3px solid var(--border-black);
+      border-radius: 12px;
+      background-color: #fff;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--border-black);
+      cursor: pointer;
+      box-shadow: 0px 4px 0px var(--border-black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.05s, box-shadow 0.05s;
+    }
+    .key-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0px 0px 0px var(--border-black);
+    }
+    .riddle-image-box {
+      width: 100%;
+      height: 200px;
+      border: 3px solid var(--border-black);
+      border-radius: 18px;
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      box-shadow: 4px 4px 0px var(--border-black);
+      margin-bottom: 20px;
+    }
+  </style>
+
+  <script>
+    // ========== الألغاز ==========
+    const RIDDLES = [
+      { emoji: ['🌞', '💧'], answer: 'شمسية', hint: 'شمس + ماء' },
+      { emoji: ['👋', '💀', '➡️'], answer: 'ياسمين', hint: 'يا + سم + ين' },
+      { emoji: ['🎨', '👻'], answer: 'فنجان', hint: 'فن + جان' },
+      { emoji: ['📯', '🏠'], answer: 'قرنبيط', hint: 'قرن + بيت' },
+      { emoji: ['🤸', '🧴'], answer: 'مطبخ', hint: 'مط + بخ' },
+      { emoji: ['🐪', '🌊'], answer: 'جمل', hint: 'جمل + بحر' },
+      { emoji: ['🦅', '📖'], answer: 'نسر', hint: 'نسر + كتاب' },
+      { emoji: ['🐟', '🌙'], answer: 'سمكة', hint: 'سمكة + قمر' },
+      { emoji: ['🌹', '🗡️'], answer: 'وردة', hint: 'وردة + سيف' },
+      { emoji: ['🐺', '🌕'], answer: 'ذئب', hint: 'ذئب + بدر' }
+    ];
+
+    const ARABIC_ALPHABET = [
+      'أ', 'ب', 'ت', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 
+      'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'هـ', 'و', 'ي', 'ة', 'ى'
+    ];
+
+    // ========== الحالة ==========
+    let gameState = {
+      mode: null,
+      
+      team1Name: 'النمور 🐯',
+      team2Name: 'الأسود 🦁',
+      team1Score: 0,
+      team2Score: 0,
+      currentRiddleIndex: 0,
+      answerRevealed: false,
+      roundEnded: false,
+      
+      soloCoins: 100,
+      soloLevel: 1,
+      soloAnswer: [],
+      
+      multiP1Score: 0,
+      multiP2Score: 0,
+      multiActiveTurn: 1,
+      multiAnswer: [],
+      multiRound: 0,
+      multiP1Name: '',
+      multiP2Name: ''
+    };
+
+    // ========== التنقل ==========
+    function goHome() {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-home').classList.add('active');
+    }
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // ========== SOLO ==========
+    function startSoloMode() {
+      gameState.mode = 'solo';
+      gameState.soloCoins = 100;
+      gameState.soloLevel = 1;
+      showScreen('screen-solo');
+      loadSoloLevel(1);
+    }
+
+    function loadSoloLevel(level) {
+      let riddleIndex = (level - 1) % RIDDLES.length;
+      let riddle = RIDDLES[riddleIndex];
+      gameState.soloAnswer = Array(riddle.answer.length).fill('');
+      
+      document.getElementById('solo-quiz-image').textContent = riddle.emoji.join(' + ');
+      document.getElementById('solo-victory').classList.remove('active');
+      document.getElementById('solo-level-display').textContent = level;
+      document.getElementById('solo-coins-display').textContent = gameState.soloCoins;
+      
+      renderSoloBlanks();
+      generateSoloKeyboard(riddle);
+    }
+
+    function renderSoloBlanks() {
+      const container = document.getElementById('solo-blanks-container');
+      container.innerHTML = gameState.soloAnswer.map((letter, idx) => `
+        <div class="blank-box ${letter ? 'filled' : ''}" onclick="removeSoloLetter(${idx})">
+          ${letter}
+        </div>
+      `).join('');
+    }
+
+    function generateSoloKeyboard(riddle) {
+      const container = document.getElementById('solo-keyboard-container');
+      let pool = [...riddle.answer.split('')];
+      while(pool.length < 12) {
+        const r = ARABIC_ALPHABET[Math.floor(Math.random() * ARABIC_ALPHABET.length)];
+        if (!pool.includes(r)) pool.push(r);
+      }
+      pool.sort(() => Math.random() - 0.5);
+      
+      container.innerHTML = pool.map(l => `
+        <button class="key-btn" onclick="selectSoloLetter('${l}')">${l}</button>
+      `).join('');
+    }
+
+    function selectSoloLetter(letter) {
+      const idx = gameState.soloAnswer.indexOf('');
+      if (idx !== -1) {
+        gameState.soloAnswer[idx] = letter;
+        renderSoloBlanks();
+        if (!gameState.soloAnswer.includes('')) checkSoloAnswer();
+      }
+    }
+
+    function removeSoloLetter(idx) {
+      gameState.soloAnswer[idx] = '';
+      renderSoloBlanks();
+    }
+
+    function checkSoloAnswer() {
+      let riddle = RIDDLES[(gameState.soloLevel - 1) % RIDDLES.length];
+      if (gameState.soloAnswer.join('') === riddle.answer) {
+        gameState.soloCoins += 15;
+        document.getElementById('solo-coins-display').textContent = gameState.soloCoins;
+        document.getElementById('solo-victory-meaning').textContent = riddle.hint;
+        document.getElementById('solo-victory').classList.add('active');
+      }
+    }
+
+    function nextSoloLevel() {
+      gameState.soloLevel++;
+      loadSoloLevel(gameState.soloLevel);
+    }
+
+    function useHint(type) {
+      if (type === 'reveal' && gameState.soloCoins >= 20) {
+        gameState.soloCoins -= 20;
+        let empty = gameState.soloAnswer.map((v, i) => v === '' ? i : -1).filter(i => i !== -1);
+        if (empty.length) {
+          let riddle = RIDDLES[(gameState.soloLevel - 1) % RIDDLES.length];
+          let idx = empty[Math.floor(Math.random() * empty.length)];
+          gameState.soloAnswer[idx] = riddle.answer[idx];
+          renderSoloBlanks();
+          if (!gameState.soloAnswer.includes('')) checkSoloAnswer();
+        }
+      } else if (type === 'remove' && gameState.soloCoins >= 30) {
+        gameState.soloCoins -= 30;
+        for (let i = gameState.soloAnswer.length - 1; i >= 0; i--) {
+          if (gameState.soloAnswer[i] !== '') {
+            gameState.soloAnswer[i] = '';
+            break;
+          }
+        }
+        renderSoloBlanks();
+      } else if (type === 'skip' && gameState.soloCoins >= 50) {
+        gameState.soloCoins -= 50;
+        nextSoloLevel();
+      } else {
+        alert('ليس لديك عملات كافية!');
+        return;
+      }
+      document.getElementById('solo-coins-display').textContent = gameState.soloCoins;
+    }
+
+    // ========== MULTIPLAYER ==========
+    function openMultiplayerSetup() {
+      showScreen('screen-multiplayer-setup');
+    }
+
+    function startMultiplayer() {
+      gameState.mode = 'multiplayer';
+      gameState.multiP1Name = document.getElementById('player1-name').value || 'اللاعب1';
+      gameState.multiP2Name = document.getElementById('player2-name').value || 'اللاعب2';
+      gameState.multiP1Score = 0;
+      gameState.multiP2Score = 0;
+      gameState.multiActiveTurn = 1;
+      gameState.multiRound = 0;
+      
+      document.getElementById('multi-p1-name').textContent = gameState.multiP1Name;
+      document.getElementById('multi-p2-name').textContent = gameState.multiP2Name;
+      
+      showScreen('screen-multiplayer');
+      loadMultiplayerRound();
+    }
+
+    function loadMultiplayerRound() {
+      let riddleIndex = gameState.multiRound % RIDDLES.length;
+      let riddle = RIDDLES[riddleIndex];
+      gameState.multiAnswer = Array(riddle.answer.length).fill('');
+      
+      document.getElementById('multi-quiz-image').textContent = riddle.emoji.join(' + ');
+      document.getElementById('multi-victory').classList.remove('active');
+      
+      let turnName = gameState.multiActiveTurn === 1 ? gameState.multiP1Name : gameState.multiP2Name;
+      document.getElementById('multi-turn-display').textContent = turnName;
+      
+      document.getElementById('multi-p1-score').textContent = gameState.multiP1Score;
+      document.getElementById('multi-p2-score').textContent = gameState.multiP2Score;
+      
+      renderMultiBlanks();
+      generateMultiKeyboard(riddle);
+    }
+
+    function renderMultiBlanks() {
+      const container = document.getElementById('multi-blanks-container');
+      container.innerHTML = gameState.multiAnswer.map((letter, idx) => `
+        <div class="blank-box ${letter ? 'filled' : ''}" onclick="removeMultiLetter(${idx})">
+          ${letter}
+        </div>
+      `).join('');
+    }
+
+    function generateMultiKeyboard(riddle) {
+      const container = document.getElementById('multi-keyboard-container');
+      let pool = [...riddle.answer.split('')];
+      while(pool.length < 12) {
+        const r = ARABIC_ALPHABET[Math.floor(Math.random() * ARABIC_ALPHABET.length)];
+        if (!pool.includes(r)) pool.push(r);
+      }
+      pool.sort(() => Math.random() - 0.5);
+      
+      container.innerHTML = pool.map(l => `
+        <button class="key-btn" onclick="selectMultiLetter('${l}')">${l}</button>
+      `).join('');
+    }
+
+    function selectMultiLetter(letter) {
+      const idx = gameState.multiAnswer.indexOf('');
+      if (idx !== -1) {
+        gameState.multiAnswer[idx] = letter;
+        renderMultiBlanks();
+      }
+    }
+
+    function removeMultiLetter(idx) {
+      gameState.multiAnswer[idx] = '';
+      renderMultiBlanks();
+    }
+
+    function submitMultiAnswer() {
+      let answer = gameState.multiAnswer.join('');
+      if (!answer) {
+        alert('ملء الإجابة');
+        return;
+      }
+
+      let riddle = RIDDLES[gameState.multiRound % RIDDLES.length];
+      
+      if (answer === riddle.answer) {
+        if (gameState.multiActiveTurn === 1) {
+          gameState.multiP1Score += 10;
+        } else {
+          gameState.multiP2Score += 10;
+        }
+        document.getElementById('multi-p1-score').textContent = gameState.multiP1Score;
+        document.getElementById('multi-p2-score').textContent = gameState.multiP2Score;
+        document.getElementById('multi-victory-meaning').textContent = riddle.hint;
+        document.getElementById('multi-victory').classList.add('active');
+      } else {
+        alert('إجابة خاطئة! حاول مرة أخرى');
+      }
+    }
+
+    function nextMultiplayerRound() {
+      gameState.multiRound++;
+      gameState.multiActiveTurn = gameState.multiActiveTurn === 1 ? 2 : 1;
+      loadMultiplayerRound();
+    }
+
+    // ========== YOUTUBE ==========
+    function startYoutubeMode() {
+      alert('نمط اليوتيوب - حل الألغاز من الفيديو');
+      goHome();
+    }
+
+    // ========== PRESENTATION MODE ==========
+    function startPresentationMode() {
+      loadSettings();
+      showScreen('screen-presenter-home');
+    }
+
+    function loadSettings() {
+      const team1 = localStorage.getItem('team1_name') || 'النمور 🐯';
+      const team2 = localStorage.getItem('team2_name') || 'الأسود 🦁';
+      document.getElementById('settings-team1').value = team1;
+      document.getElementById('settings-team2').value = team2;
+      gameState.team1Name = team1;
+      gameState.team2Name = team2;
+    }
+
+    function saveSettings() {
+      const team1 = document.getElementById('settings-team1').value.trim() || 'النمور 🐯';
+      const team2 = document.getElementById('settings-team2').value.trim() || 'الأسود 🦁';
+      localStorage.setItem('team1_name', team1);
+      localStorage.setItem('team2_name', team2);
+      gameState.team1Name = team1;
+      gameState.team2Name = team2;
+      alert('✅ تم حفظ الإعدادات!');
+      goToPresenterHome();
+    }
+
+    function openSettings() {
+      loadSettings();
+      showScreen('screen-settings');
+    }
+
+    function goToPresenterHome() {
+      showScreen('screen-presenter-home');
+    }
+
+    function copyPresenterLink() {
+      const url = window.location.href.split('?')[0] + '?mode=presenter';
+      navigator.clipboard.writeText(url).then(() => {
+        alert('✅ تم نسخ رابط العرض!');
+      }).catch(() => {
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        alert('✅ تم نسخ الرابط!');
+      });
+    }
+
+    // ========== بدء اللعبة ==========
+    function startGame() {
+      loadSettings();
+      
+      gameState.team1Score = 0;
+      gameState.team2Score = 0;
+      gameState.currentRiddleIndex = 0;
+      gameState.answerRevealed = false;
+      gameState.roundEnded = false;
+      
+      // تحديث أسماء الفرق في شاشة المقدم
+      document.getElementById('game-team1').textContent = gameState.team1Name;
+      document.getElementById('game-team2').textContent = gameState.team2Name;
+      document.getElementById('game-team1-display2').textContent = gameState.team1Name;
+      document.getElementById('game-team2-display2').textContent = gameState.team2Name;
+      document.getElementById('game-team1-label').textContent = gameState.team1Name;
+      document.getElementById('game-team2-label').textContent = gameState.team2Name;
+      
+      // تحديث أسماء الفرق في شاشة المشاهدين
+      document.getElementById('viewer-team1').textContent = gameState.team1Name;
+      document.getElementById('viewer-team2').textContent = gameState.team2Name;
+      
+      document.getElementById('game-total-rounds').textContent = RIDDLES.length;
+      document.getElementById('viewer-total-rounds').textContent = RIDDLES.length;
+      
+      showScreen('screen-presenter-game');
+      loadGameQuestion();
+      updateViewerDisplay();
+    }
+
+    function loadGameQuestion() {
+      let riddle = RIDDLES[gameState.currentRiddleIndex % RIDDLES.length];
+      
+      // تحديث شاشة المقدم
+      document.getElementById('game-quiz-image').textContent = riddle.emoji.join(' + ');
+      document.getElementById('game-answer-display').textContent = '❓';
+      document.getElementById('game-current-round').textContent = gameState.currentRiddleIndex + 1;
+      
+      // تحديث شاشة المشاهدين
+      document.getElementById('viewer-quiz-image').textContent = riddle.emoji.join(' + ');
+      document.getElementById('viewer-answer-display').textContent = '❓';
+      document.getElementById('viewer-current-round').textContent = gameState.currentRiddleIndex + 1;
+      
+      gameState.answerRevealed = false;
+      gameState.roundEnded = false;
+      
+      document.getElementById('game-team1-btn').disabled = true;
+      document.getElementById('game-team2-btn').disabled = true;
+      document.getElementById('game-reveal-btn').disabled = false;
+      document.getElementById('game-winner-display').style.display = 'none';
+      document.getElementById('viewer-winner-display').style.display = 'none';
+      
+      updateGameScore();
+      updateViewerDisplay();
+    }
+
+    function updateGameScore() {
+      document.getElementById('game-team1-score').textContent = gameState.team1Score;
+      document.getElementById('game-team2-score').textContent = gameState.team2Score;
+      document.getElementById('game-team1-score2').textContent = gameState.team1Score;
+      document.getElementById('game-team2-score2').textContent = gameState.team2Score;
+      
+      updateViewerDisplay();
+    }
+
+    function updateViewerDisplay() {
+      document.getElementById('viewer-team1-score').textContent = gameState.team1Score;
+      document.getElementById('viewer-team2-score').textContent = gameState.team2Score;
+    }
+
+    function revealGameAnswer() {
+      let riddle = RIDDLES[gameState.currentRiddleIndex % RIDDLES.length];
+      
+      document.getElementById('game-answer-display').textContent = riddle.answer + ' (' + riddle.hint + ')';
+      document.getElementById('viewer-answer-display').textContent = riddle.answer + ' (' + riddle.hint + ')';
+      
+      gameState.answerRevealed = true;
+      
+      document.getElementById('game-team1-btn').disabled = false;
+      document.getElementById('game-team2-btn').disabled = false;
+      document.getElementById('game-reveal-btn').disabled = true;
+    }
+
+    function markGameTeamCorrect(team) {
+      if (!gameState.answerRevealed) {
+        alert('⚠️ كشف الإجابة أولاً!');
+        return;
+      }
+      
+      if (gameState.roundEnded) {
+        alert('⚠️ الجولة انتهت!');
+        return;
+      }
+      
+      gameState.roundEnded = true;
+      
+      let winnerName = '';
+      if (team === 1) {
+        gameState.team1Score += 1;
+        winnerName = gameState.team1Name;
+        document.getElementById('game-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
+        document.getElementById('game-winner-text').style.color = '#3b82f6';
+        document.getElementById('viewer-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
+        document.getElementById('viewer-winner-text').style.color = '#3b82f6';
+      } else {
+        gameState.team2Score += 1;
+        winnerName = gameState.team2Name;
+        document.getElementById('game-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
+        document.getElementById('game-winner-text').style.color = '#ec4899';
+        document.getElementById('viewer-winner-text').textContent = '🏆 ' + winnerName + ' جاوب صح! +1 نقطة';
+        document.getElementById('viewer-winner-text').style.color = '#ec4899';
+      }
+      
+      document.getElementById('game-winner-display').style.display = 'block';
+      document.getElementById('viewer-winner-display').style.display = 'block';
+      document.getElementById('game-team1-btn').disabled = true;
+      document.getElementById('game-team2-btn').disabled = true;
+      
+      updateGameScore();
+      updateViewerDisplay();
+    }
+
+    function nextGameQuestion() {
+      if (!gameState.roundEnded) {
+        alert('⚠️ اختر الفريق الفائز أولاً!');
+        return;
+      }
+      
+      gameState.currentRiddleIndex++;
+      if (gameState.currentRiddleIndex >= RIDDLES.length) {
+        alert('🎉 انتهت جميع الأسئلة! النتيجة النهائية:\n' + 
+              gameState.team1Name + ': ' + gameState.team1Score + ' نقطة\n' +
+              gameState.team2Name + ': ' + gameState.team2Score + ' نقطة');
+        endGame();
+        return;
+      }
+      loadGameQuestion();
+    }
+
+    function endGame() {
+      showScreen('screen-presenter-home');
+    }
+
+    // ========== التشغيل عند تحميل الصفحة ==========
+    window.onload = function() {
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get('mode');
+      
+      loadSettings();
+      
+      if (mode === 'presenter') {
+        showScreen('screen-presenter-home');
+      } else {
+        // المشاهدين - يظهر لهم نفس الأسئلة والنقاط
+        showScreen('screen-viewer');
+        // تحميل السؤال الأول
+        let riddle = RIDDLES[0];
+        document.getElementById('viewer-quiz-image').textContent = riddle.emoji.join(' + ');
+        document.getElementById('viewer-answer-display').textContent = '❓';
+        document.getElementById('viewer-current-round').textContent = '1';
+        document.getElementById('viewer-total-rounds').textContent = RIDDLES.length;
+        document.getElementById('viewer-team1').textContent = gameState.team1Name;
+        document.getElementById('viewer-team2').textContent = gameState.team2Name;
+      }
+    };
+  </script>
+</body>
+</html>
